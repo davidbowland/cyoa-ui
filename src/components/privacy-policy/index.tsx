@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography'
 const PrivacyPolicy = (): React.ReactNode => {
   return (
     <Stack spacing={2} sx={{ padding: 4 }}>
-      <Typography variant="h5">Connections Privacy Policy</Typography>
+      <Typography variant="h5">Choose Your Own Adventure Privacy Policy</Typography>
       <Typography variant="body1">
         This Privacy Policy describes how your personal information is collected, used, and shared when you visit{' '}
-        <Link to="https://connections.dbowland.com/">https://connections.dbowland.com</Link> (the &quot;Site&quot;).
+        <Link to="https://cyoa.dbowland.com/">https://cyoa.dbowland.com</Link> (the &quot;Site&quot;).
       </Typography>
       <Typography variant="h6">PERSONAL INFORMATION WE COLLECT</Typography>
       <Typography variant="body1">

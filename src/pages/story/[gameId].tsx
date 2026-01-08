@@ -4,10 +4,11 @@ import Grid from '@mui/material/Grid'
 
 import PrivacyLink from '@components/privacy-link'
 import StoryEngine from '@components/story-engine'
+import { GameId } from '@types'
 
 export interface StoryPageProps {
   params: {
-    gameId: string
+    gameId: GameId
   }
 }
 

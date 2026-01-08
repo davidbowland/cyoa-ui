@@ -41,7 +41,7 @@ module.exports = {
     },
   ],
   siteMetadata: {
-    siteUrl: 'https://connections.dbowland.com',
-    title: 'Connections',
+    siteUrl: 'https://cyoa.dbowland.com',
+    title: 'Choose Your Own Adventure',
   },
 }

@@ -87,8 +87,8 @@ const NarrativeDisplay = ({
             {game.title}
           </Typography>
 
-          <Typography component="p" sx={{ mb: 2 }} variant="body1">
-            {narrative.recap}
+          <Typography component="p" sx={{ mb: 2, whiteSpace: 'pre-wrap' }} variant="body1">
+            {narrative.narrative}
           </Typography>
 
           <Divider sx={{ my: 2 }} />
@@ -100,49 +100,16 @@ const NarrativeDisplay = ({
             <Typography component="p" variant="body2">
               <strong>{game.resourceName}:</strong> {narrative.currentResourceValue}
             </Typography>
-            {narrative.lastChoiceMade && (
-              <Typography component="p" sx={{ mt: 1 }} variant="body2">
-                <strong>Last Choice:</strong> {narrative.lastChoiceMade}
-              </Typography>
-            )}
           </Box>
 
-          {narrative.currentInventory.length > 0 && (
+          {narrative.inventory.length > 0 && (
             <Box sx={{ mb: 2 }}>
               <Typography component="h3" gutterBottom variant="h6">
                 Inventory
               </Typography>
               <Stack direction="row" flexWrap="wrap" spacing={1}>
-                {narrative.currentInventory.map((item, index) => (
+                {narrative.inventory.map((item, index) => (
                   <Chip key={`inventory-${index}`} label={item} size="small" variant="outlined" />
-                ))}
-              </Stack>
-            </Box>
-          )}
-
-          {narrative.inventoryToIntroduce.length > 0 && (
-            <Box sx={{ mb: 2 }}>
-              <Typography component="h3" gutterBottom variant="h6">
-                New Items
-              </Typography>
-              <Stack direction="row" flexWrap="wrap" spacing={1}>
-                {narrative.inventoryToIntroduce.map((item, index) => (
-                  <Chip color="primary" key={`new-item-${index}`} label={item} size="small" />
-                ))}
-              </Stack>
-            </Box>
-          )}
-
-          {narrative.keyInformationToIntroduce.length > 0 && (
-            <Box sx={{ mb: 2 }}>
-              <Typography component="h3" gutterBottom variant="h6">
-                Key Information
-              </Typography>
-              <Stack direction="column" spacing={1}>
-                {narrative.keyInformationToIntroduce.map((info, index) => (
-                  <Alert key={`key-info-${index}`} severity="info" variant="outlined">
-                    {info}
-                  </Alert>
                 ))}
               </Stack>
             </Box>
@@ -151,7 +118,7 @@ const NarrativeDisplay = ({
           <Divider sx={{ my: 2 }} />
 
           <Typography component="h3" gutterBottom variant="h6">
-            {narrative.nextChoice}
+            {narrative.choice}
           </Typography>
 
           <ChoiceHandler disabled={loading} onChoiceSelect={onChoiceSelect} options={narrative.options} />

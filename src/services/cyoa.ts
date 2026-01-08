@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { CyoaGame, CyoaGameBulk, Narrative } from '@types'
+import { CyoaGame, CyoaGameBulk, GameId, Narrative, NarrativeId } from '@types'
 
 const api = axios.create({
   baseURL: process.env.GATSBY_CYOA_API_BASE_URL,
@@ -12,12 +12,12 @@ export const fetchCyoaGames = async (): Promise<CyoaGameBulk[]> => {
   return response.data
 }
 
-export const fetchCyoaGame = async (gameId: string): Promise<CyoaGame> => {
+export const fetchCyoaGame = async (gameId: GameId): Promise<CyoaGame> => {
   const response = await api.get(`/games/${gameId}`)
   return response.data
 }
 
-export const fetchNarrative = async (gameId: string, narrativeId: string): Promise<Narrative> => {
+export const fetchNarrative = async (gameId: GameId, narrativeId: NarrativeId): Promise<Narrative> => {
   const response = await api.get(`/games/${gameId}/narratives/${narrativeId}`)
   return response.data
 }

@@ -1,3 +1,4 @@
+import { mockCyoaGame, mockCyoaGames, mockNarrative } from '../../test/__mocks__'
 import { fetchCyoaGames, fetchCyoaGame, fetchNarrative } from './cyoa'
 
 const mockGet = jest.fn()
@@ -10,21 +11,12 @@ jest.mock('axios', () => ({
 describe('cyoa', () => {
   describe('fetchCyoaGames', () => {
     it('fetches CYOA games', async () => {
-      const mockGames = [
-        {
-          description: 'A test game',
-          gameId: 'game-1',
-          initialNarrativeId: 'start',
-          resourceName: 'Health',
-          title: 'Test Game 1',
-        },
-      ]
-      mockGet.mockResolvedValueOnce({ data: mockGames })
+      mockGet.mockResolvedValueOnce({ data: mockCyoaGames })
 
       const result = await fetchCyoaGames()
 
       expect(mockGet).toHaveBeenCalledWith('/games')
-      expect(result).toEqual(mockGames)
+      expect(result).toEqual(mockCyoaGames)
     })
 
     it('throws error on failure', async () => {
@@ -37,18 +29,12 @@ describe('cyoa', () => {
 
   describe('fetchCyoaGame', () => {
     it('fetches a specific CYOA game', async () => {
-      const mockGame = {
-        description: 'A test game',
-        initialNarrativeId: 'start',
-        resourceName: 'Health',
-        title: 'Test Game',
-      }
-      mockGet.mockResolvedValueOnce({ data: mockGame })
+      mockGet.mockResolvedValueOnce({ data: mockCyoaGame })
 
       const result = await fetchCyoaGame('game-1')
 
       expect(mockGet).toHaveBeenCalledWith('/games/game-1')
-      expect(result).toEqual(mockGame)
+      expect(result).toEqual(mockCyoaGame)
     })
 
     it('throws error on failure', async () => {
@@ -61,19 +47,6 @@ describe('cyoa', () => {
 
   describe('fetchNarrative', () => {
     it('fetches a narrative for a game', async () => {
-      const mockNarrative = {
-        currentInventory: [],
-        currentResourceValue: 100,
-        generationStartTime: 1640995200000,
-        inventoryOrInformationConsumed: [],
-        inventoryToIntroduce: [],
-        keyInformationToIntroduce: [],
-        lastChoiceMade: 'Started the adventure',
-        nextChoice: 'What do you do?',
-        options: [{ name: 'Go north' }, { name: 'Go south' }],
-        recap: 'You are in a forest',
-        redHerringsToIntroduce: [],
-      }
       mockGet.mockResolvedValueOnce({ data: mockNarrative })
 
       const result = await fetchNarrative('game-1', 'start')

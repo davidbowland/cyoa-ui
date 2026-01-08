@@ -4,38 +4,20 @@ import userEvent from '@testing-library/user-event'
 import { navigate } from 'gatsby'
 import React from 'react'
 
+import { mockCyoaGames } from '../../../test/__mocks__'
 import GameBrowser from './index'
-import { CyoaGameBulk } from '@types'
 
 jest.mock('gatsby', () => ({
   navigate: jest.fn(),
 }))
 
 describe('GameBrowser component', () => {
-  const mockGames: CyoaGameBulk[] = [
-    {
-      description: 'A thrilling adventure awaits',
-      gameId: 'game-1',
-      image: 'https://example.com/image1.jpg',
-      initialNarrativeId: 'start',
-      resourceName: 'Health',
-      title: 'Test Adventure 1',
-    },
-    {
-      description: 'Another exciting journey',
-      gameId: 'game-2',
-      initialNarrativeId: 'begin',
-      resourceName: 'Energy',
-      title: 'Test Adventure 2',
-    },
-  ]
-
   beforeEach(() => {
     jest.mocked(navigate).mockClear()
   })
 
   test('expect rendering GameBrowser displays heading', () => {
-    render(<GameBrowser games={mockGames} loading={false} />)
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     expect(screen.getByText('Choose Your Own Adventure')).toBeInTheDocument()
   })
@@ -67,7 +49,7 @@ describe('GameBrowser component', () => {
   })
 
   test('expect rendering GameBrowser displays game list when games provided', () => {
-    render(<GameBrowser games={mockGames} loading={false} />)
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     expect(screen.getByText('Test Adventure 1')).toBeInTheDocument()
     expect(screen.getByText('A thrilling adventure awaits')).toBeInTheDocument()
@@ -76,7 +58,7 @@ describe('GameBrowser component', () => {
   })
 
   test('expect rendering GameBrowser shows image when game has image', () => {
-    render(<GameBrowser games={mockGames} loading={false} />)
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     const image = screen.getByAltText('Cover image for Test Adventure 1')
     expect(image).toBeInTheDocument()
@@ -84,7 +66,7 @@ describe('GameBrowser component', () => {
 
   test('expect clicking Play Game button navigates to story page', async () => {
     const user = userEvent.setup()
-    render(<GameBrowser games={mockGames} loading={false} />)
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     const playButtons = screen.getAllByText('Play Game')
     await user.click(playButtons[0])
@@ -94,7 +76,7 @@ describe('GameBrowser component', () => {
 
   test('expect clicking second Play Game button navigates to correct story page', async () => {
     const user = userEvent.setup()
-    render(<GameBrowser games={mockGames} loading={false} />)
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     const playButtons = screen.getAllByText('Play Game')
     await user.click(playButtons[1])

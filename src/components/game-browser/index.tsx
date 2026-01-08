@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid'
 import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
 
-import { CyoaGameBulk } from '@types'
+import { CyoaGameBulk, GameId } from '@types'
 
 export interface GameBrowserProps {
   games: CyoaGameBulk[]
@@ -21,20 +21,22 @@ export interface GameBrowserProps {
 }
 
 const GameBrowser = ({ games, loading, errorMessage }: GameBrowserProps): React.ReactNode => {
-  const handleGameSelect = useCallback((gameId: string): void => {
+  const handleGameSelect = useCallback((gameId: GameId): void => {
     navigate(`/story/${gameId}`)
   }, [])
 
   if (errorMessage) {
     return (
-      <Alert aria-live="polite" role="alert" severity="error">
-        {errorMessage}
-      </Alert>
+      <Box sx={{ p: 3 }}>
+        <Alert aria-live="polite" role="alert" severity="error">
+          {errorMessage}
+        </Alert>
+      </Box>
     )
   }
 
   return (
-    <Box component="main" role="main">
+    <Box component="main" role="main" sx={{ p: 3 }}>
       <Typography
         aria-label="Choose Your Own Adventure Games"
         component="h1"

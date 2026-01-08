@@ -6,16 +6,16 @@ import Button from '@mui/material/Button'
 
 import NarrativeDisplay from '@components/narrative-display'
 import { fetchCyoaGame, fetchNarrative } from '@services/cyoa'
-import { CyoaGame, Narrative } from '@types'
+import { CyoaGame, GameId, Narrative, NarrativeId } from '@types'
 
 export interface StoryEngineProps {
-  gameId: string
+  gameId: GameId
 }
 
 const StoryEngine = ({ gameId }: StoryEngineProps): React.ReactNode => {
   const [currentGame, setCurrentGame] = useState<CyoaGame | null>(null)
   const [currentNarrative, setCurrentNarrative] = useState<Narrative | null>(null)
-  const [narrativeId, setNarrativeId] = useState<string>('')
+  const [narrativeId, setNarrativeId] = useState<NarrativeId>('')
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 

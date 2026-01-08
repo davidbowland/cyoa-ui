@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Infrastructure for Connections UI
+  Infrastructure for CYOA UI
 
 Parameters:
   Environment:
@@ -14,14 +14,14 @@ Parameters:
 Mappings:
   EnvironmentMap:
     prod:
-      bucketName: connections-ui
+      bucketName: cyoa-ui
       certificate: adce1a21-90b4-4120-8548-111215e582f0
-      domain: connections.dbowland.com
+      domain: cyoa.dbowland.com
       zoneId: Z072422417XWM8PIXXSFA
     test:
-      bucketName: connections-ui-test
+      bucketName: cyoa-ui-test
       certificate: 6a48cba7-feb9-4de5-8cbf-d383140fcdef
-      domain: connections.bowland.link
+      domain: cyoa.bowland.link
       zoneId: Z01312547RGU1BYKIJXY
 
 Resources:
@@ -37,9 +37,9 @@ Resources:
       BucketName: !FindInMap [EnvironmentMap, !Ref Environment, bucketName]
       Tags:
         - Key: 'created-by'
-          Value: 'connections-ui'
+          Value: 'cyoa-ui'
         - Key: 'created-for'
-          Value: 'connections'
+          Value: 'cyoa'
         - Key: 'environment'
           Value: !Ref Environment
 
@@ -116,9 +116,9 @@ Resources:
           SslSupportMethod: 'sni-only'
       Tags:
         - Key: 'created-by'
-          Value: 'connections-ui'
+          Value: 'cyoa-ui'
         - Key: 'created-for'
-          Value: 'connections'
+          Value: 'cyoa'
         - Key: 'environment'
           Value: !Ref Environment
 

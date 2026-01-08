@@ -1,31 +1,14 @@
 import { renderHook, waitFor } from '@testing-library/react'
 
+import { mockCyoaGames } from '../../test/__mocks__'
 import { useCyoaGames } from './useCyoaGames'
 import * as cyoa from '@services/cyoa'
 
 jest.mock('@services/cyoa')
 
 describe('useCyoaGames', () => {
-  const mockGames = [
-    {
-      description: 'A test adventure',
-      gameId: 'test-game-1',
-      initialNarrativeId: 'start',
-      resourceName: 'Health',
-      title: 'Test Adventure 1',
-    },
-    {
-      description: 'Another test adventure',
-      gameId: 'test-game-2',
-      image: 'test-image.jpg',
-      initialNarrativeId: 'beginning',
-      resourceName: 'Energy',
-      title: 'Test Adventure 2',
-    },
-  ]
-
   beforeAll(() => {
-    jest.mocked(cyoa).fetchCyoaGames.mockResolvedValue(mockGames)
+    jest.mocked(cyoa).fetchCyoaGames.mockResolvedValue(mockCyoaGames)
 
     console.error = jest.fn()
   })
@@ -39,7 +22,7 @@ describe('useCyoaGames', () => {
       expect(result.current.isLoading).toBe(false)
     })
 
-    expect(result.current.games).toEqual(mockGames)
+    expect(result.current.games).toEqual(mockCyoaGames)
     expect(result.current.errorMessage).toBeNull()
   })
 

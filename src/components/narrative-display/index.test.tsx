@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event'
 import { navigate } from 'gatsby'
 import React from 'react'
 
+import { mockCyoaGame, mockNarrative } from '../../../test/__mocks__'
 import NarrativeDisplay from './index'
 import ChoiceHandler from '@components/choice-handler'
-import { CyoaGame, Narrative } from '@types'
 
 jest.mock('gatsby', () => ({
   navigate: jest.fn(),
@@ -15,27 +15,6 @@ jest.mock('gatsby', () => ({
 jest.mock('@components/choice-handler')
 
 describe('NarrativeDisplay component', () => {
-  const mockGame: CyoaGame = {
-    description: 'A test adventure',
-    initialNarrativeId: 'start',
-    resourceName: 'Health',
-    title: 'Test Adventure',
-  }
-
-  const mockNarrative: Narrative = {
-    currentInventory: ['sword', 'potion'],
-    currentResourceValue: 85,
-    generationStartTime: 1640995200000,
-    inventoryOrInformationConsumed: [],
-    inventoryToIntroduce: ['magic ring'],
-    keyInformationToIntroduce: ['The door is locked'],
-    lastChoiceMade: 'Entered the dungeon',
-    nextChoice: 'What do you do next?',
-    options: [{ name: 'Attack the goblin' }, { name: 'Try to sneak past' }],
-    recap: 'You find yourself in a dark dungeon with a goblin blocking your path.',
-    redHerringsToIntroduce: [],
-  }
-
   const mockOnChoiceSelect = jest.fn()
 
   beforeEach(() => {
@@ -56,7 +35,7 @@ describe('NarrativeDisplay component', () => {
     render(
       <NarrativeDisplay
         errorMessage={errorMessage}
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -70,7 +49,7 @@ describe('NarrativeDisplay component', () => {
   test('expect rendering NarrativeDisplay displays game title and narrative content', () => {
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -78,15 +57,13 @@ describe('NarrativeDisplay component', () => {
     )
 
     expect(screen.getByText('Test Adventure')).toBeInTheDocument()
-    expect(
-      screen.getByText('You find yourself in a dark dungeon with a goblin blocking your path.'),
-    ).toBeInTheDocument()
+    expect(screen.getByText('You find yourself at a crossroads in the forest.')).toBeInTheDocument()
   })
 
   test('expect rendering NarrativeDisplay shows current status', () => {
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -94,15 +71,13 @@ describe('NarrativeDisplay component', () => {
     )
 
     expect(screen.getByText(/Health/)).toBeInTheDocument()
-    expect(screen.getByText(/85/)).toBeInTheDocument()
-    expect(screen.getByText(/Last Choice/)).toBeInTheDocument()
-    expect(screen.getByText(/Entered the dungeon/)).toBeInTheDocument()
+    expect(screen.getByText(/100/)).toBeInTheDocument()
   })
 
   test('expect rendering NarrativeDisplay shows current inventory', () => {
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -114,51 +89,23 @@ describe('NarrativeDisplay component', () => {
     expect(screen.getByText('potion')).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay shows new items', () => {
-    render(
-      <NarrativeDisplay
-        game={mockGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
-    )
-
-    expect(screen.getByText('New Items')).toBeInTheDocument()
-    expect(screen.getByText('magic ring')).toBeInTheDocument()
-  })
-
-  test('expect rendering NarrativeDisplay shows key information', () => {
-    render(
-      <NarrativeDisplay
-        game={mockGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
-    )
-
-    expect(screen.getByText('Key Information')).toBeInTheDocument()
-    expect(screen.getByText('The door is locked')).toBeInTheDocument()
-  })
-
   test('expect rendering NarrativeDisplay shows next choice prompt', () => {
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
 
-    expect(screen.getByText('What do you do next?')).toBeInTheDocument()
+    expect(screen.getByText('What do you do?')).toBeInTheDocument()
   })
 
   test('expect rendering NarrativeDisplay passes correct props to ChoiceHandler', () => {
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -179,7 +126,7 @@ describe('NarrativeDisplay component', () => {
     const user = userEvent.setup()
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -192,18 +139,15 @@ describe('NarrativeDisplay component', () => {
     expect(navigate).toHaveBeenCalledWith('/')
   })
 
-  test('expect rendering NarrativeDisplay hides sections when data is empty', () => {
-    const emptyNarrative: Narrative = {
+  test('expect rendering NarrativeDisplay hides inventory section when empty', () => {
+    const emptyNarrative = {
       ...mockNarrative,
-      currentInventory: [],
-      inventoryToIntroduce: [],
-      keyInformationToIntroduce: [],
-      lastChoiceMade: '',
+      inventory: [],
     }
 
     render(
       <NarrativeDisplay
-        game={mockGame}
+        game={mockCyoaGame}
         loading={false}
         narrative={emptyNarrative}
         onChoiceSelect={mockOnChoiceSelect}
@@ -211,8 +155,5 @@ describe('NarrativeDisplay component', () => {
     )
 
     expect(screen.queryByText('Inventory')).not.toBeInTheDocument()
-    expect(screen.queryByText('New Items')).not.toBeInTheDocument()
-    expect(screen.queryByText('Key Information')).not.toBeInTheDocument()
-    expect(screen.queryByText('Last Choice:')).not.toBeInTheDocument()
   })
 })
