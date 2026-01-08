@@ -14,12 +14,14 @@ Parameters:
 Mappings:
   EnvironmentMap:
     prod:
-      bucketName: cyoa-ui
+      bucketNameAssets: cyoa-api-assets
+      bucketNameUi: cyoa-ui
       certificate: adce1a21-90b4-4120-8548-111215e582f0
       domain: cyoa.dbowland.com
       zoneId: Z072422417XWM8PIXXSFA
     test:
-      bucketName: cyoa-ui-test
+      bucketNameAssets: cyoa-api-assets-test
+      bucketNameUi: cyoa-ui-test
       certificate: 6a48cba7-feb9-4de5-8cbf-d383140fcdef
       domain: cyoa.bowland.link
       zoneId: Z01312547RGU1BYKIJXY
@@ -34,7 +36,7 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-      BucketName: !FindInMap [EnvironmentMap, !Ref Environment, bucketName]
+      BucketName: !FindInMap [EnvironmentMap, !Ref Environment, bucketNameUi]
       Tags:
         - Key: 'created-by'
           Value: 'cyoa-ui'
@@ -45,14 +47,14 @@ Resources:
 
   UiBucketPolicy:
     Type: AWS::S3::BucketPolicy
-    DependsOn: UiBucket
     Properties:
       Bucket: !Ref UiBucket
       PolicyDocument:
         Statement:
           - Action: 's3:Get*'
             Effect: Allow
-            Resource: !Sub 'arn:aws:s3:::${UiBucket}/*'
+            Resource:
+              - !Sub 'arn:aws:s3:::${UiBucket}/*'
             Principal:
               CanonicalUser: !GetAtt OriginAccessIdentity.S3CanonicalUserId
 
@@ -85,6 +87,18 @@ Resources:
           - ErrorCode: 500
             ResponseCode: 500
             ResponsePagePath: /500/index.html
+        CacheBehaviors:
+          - PathPattern: 'images/*'
+            AllowedMethods:
+              - 'GET'
+              - 'HEAD'
+              - 'OPTIONS'
+            CachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad' # Managed-CachingDisabled
+            Compress: true
+            OriginRequestPolicyId: '88a5eaf4-2fd4-4709-b370-b4c650ea3fcf' # Managed-CORS-S3Origin
+            ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03 # Managed-SecurityHeadersPolicy
+            TargetOriginId: S3AssetsOrigin
+            ViewerProtocolPolicy: 'redirect-to-https'
         DefaultCacheBehavior:
           AllowedMethods:
             - 'GET'
@@ -103,6 +117,14 @@ Resources:
         Origins:
           - DomainName: !GetAtt UiBucket.RegionalDomainName
             Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub
+                - 'origin-access-identity/cloudfront/${Identity}'
+                - Identity: !Ref OriginAccessIdentity
+          - DomainName: !Sub
+              - '${BucketName}.s3.${AWS::Region}.amazonaws.com'
+              - BucketName: !FindInMap [EnvironmentMap, !Ref Environment, bucketNameAssets]
+            Id: S3AssetsOrigin
             S3OriginConfig:
               OriginAccessIdentity: !Sub
                 - 'origin-access-identity/cloudfront/${Identity}'
@@ -126,7 +148,6 @@ Resources:
 
   DomainDns:
     Type: AWS::Route53::RecordSet
-    DependsOn: UiCloudfrontDistribution
     Properties:
       AliasTarget:
         DNSName: !GetAtt UiCloudfrontDistribution.DomainName

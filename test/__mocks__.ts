@@ -36,7 +36,10 @@ export const mockCyoaGames: CyoaGameBulk[] = [
 export const mockNarrative: Narrative = {
   choice: 'What do you do?',
   currentResourceValue: 100,
-  inventory: ['sword', 'potion'],
+  inventory: [
+    { image: 'sword.png', name: 'sword' },
+    { image: 'potion.png', name: 'potion' },
+  ],
   narrative: 'You find yourself at a crossroads in the forest.',
   options: [{ name: 'Go left' }, { name: 'Go right' }],
 }

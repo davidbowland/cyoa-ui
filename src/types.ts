@@ -17,11 +17,16 @@ export interface CyoaGameBulk extends CyoaGame {
   gameId: GameId
 }
 
+export interface InventoryItem {
+  name: string
+  image?: string
+}
+
 export interface Narrative {
   narrative: string
   choice: string
   options: CyoaOption[]
-  inventory: string[]
+  inventory: InventoryItem[]
   currentResourceValue: number
 }
 

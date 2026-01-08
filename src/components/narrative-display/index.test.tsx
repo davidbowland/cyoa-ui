@@ -133,7 +133,7 @@ describe('NarrativeDisplay component', () => {
       />,
     )
 
-    const backButton = screen.getByText('← Back to Games')
+    const backButton = screen.getByText('Back to games list')
     await user.click(backButton)
 
     expect(navigate).toHaveBeenCalledWith('/')

@@ -25,9 +25,6 @@ describe('GameBrowser component', () => {
   test('expect rendering GameBrowser shows loading skeletons when loading', () => {
     render(<GameBrowser games={[]} loading={true} />)
 
-    const skeletons = screen.getAllByRole('status', { name: 'Loading games' })
-    expect(skeletons).toHaveLength(1)
-
     // Check for skeleton elements by class
     const skeletonElements = document.querySelectorAll('.MuiSkeleton-root')
     expect(skeletonElements.length).toBeGreaterThan(0)
@@ -57,28 +54,21 @@ describe('GameBrowser component', () => {
     expect(screen.getByText('Another exciting journey')).toBeInTheDocument()
   })
 
-  test('expect rendering GameBrowser shows image when game has image', () => {
-    render(<GameBrowser games={mockCyoaGames} loading={false} />)
-
-    const image = screen.getByAltText('Cover image for Test Adventure 1')
-    expect(image).toBeInTheDocument()
-  })
-
-  test('expect clicking Play Game button navigates to story page', async () => {
+  test('expect clicking Play button navigates to story page', async () => {
     const user = userEvent.setup()
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
-    const playButtons = screen.getAllByText('Play Game')
+    const playButtons = screen.getAllByText('Play')
     await user.click(playButtons[0])
 
     expect(navigate).toHaveBeenCalledWith('/story/game-1')
   })
 
-  test('expect clicking second Play Game button navigates to correct story page', async () => {
+  test('expect clicking second Play button navigates to correct story page', async () => {
     const user = userEvent.setup()
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
-    const playButtons = screen.getAllByText('Play Game')
+    const playButtons = screen.getAllByText('Play')
     await user.click(playButtons[1])
 
     expect(navigate).toHaveBeenCalledWith('/story/game-2')

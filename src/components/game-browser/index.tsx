@@ -7,8 +7,6 @@ import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Grid from '@mui/material/Grid'
 import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
 
@@ -48,23 +46,20 @@ const GameBrowser = ({ games, loading, errorMessage }: GameBrowserProps): React.
       </Typography>
 
       {loading ? (
-        <Grid aria-label="Loading games" container role="status" spacing={3}>
+        <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2 }}>
           {Array.from({ length: 6 }).map((_, index) => (
-            <Grid item key={`skeleton-${index}`} md={4} sm={6} xs={12}>
-              <Card aria-hidden="true">
-                <Skeleton height={200} variant="rectangular" />
-                <CardContent>
-                  <Skeleton height={32} variant="text" />
-                  <Skeleton height={20} variant="text" />
-                  <Skeleton height={20} variant="text" width="60%" />
-                </CardContent>
-                <CardActions>
-                  <Skeleton height={36} variant="rectangular" width={80} />
-                </CardActions>
-              </Card>
-            </Grid>
+            <Card key={`skeleton-${index}`} sx={{ maxWidth: 800, width: '100%' }}>
+              <CardContent>
+                <Skeleton height={32} variant="text" width="60%" />
+                <Skeleton height={20} variant="text" />
+                <Skeleton height={20} variant="text" width="80%" />
+              </CardContent>
+              <CardActions sx={{ justifyContent: 'center' }}>
+                <Skeleton height={36} variant="rectangular" width={100} />
+              </CardActions>
+            </Card>
           ))}
-        </Grid>
+        </Box>
       ) : games.length === 0 ? (
         <Box aria-live="polite" role="status" sx={{ mt: 4, textAlign: 'center' }}>
           <Typography color="text.secondary" component="h2" variant="h6">
@@ -75,46 +70,36 @@ const GameBrowser = ({ games, loading, errorMessage }: GameBrowserProps): React.
           </Typography>
         </Box>
       ) : (
-        <Grid aria-label="Available games" container role="list" spacing={3}>
+        <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2 }}>
           {games.map((game) => (
-            <Grid item key={game.gameId} md={4} role="listitem" sm={6} xs={12}>
-              <Card
-                aria-describedby={`game-description-${game.gameId}`}
-                aria-labelledby={`game-title-${game.gameId}`}
-                component="article"
-                sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-              >
-                {game.image && (
-                  <CardMedia
-                    alt={`Cover image for ${game.title}`}
-                    component="img"
-                    height="200"
-                    image={game.image}
-                    sx={{ objectFit: 'cover' }}
-                  />
-                )}
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography component="h3" gutterBottom id={`game-title-${game.gameId}`} variant="h6">
-                    {game.title}
-                  </Typography>
-                  <Typography color="text.secondary" id={`game-description-${game.gameId}`} variant="body2">
-                    {game.description}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    aria-label={`Play ${game.title}`}
-                    onClick={() => handleGameSelect(game.gameId)}
-                    size="small"
-                    variant="contained"
-                  >
-                    Play Game
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
+            <Card
+              aria-describedby={`game-description-${game.gameId}`}
+              aria-labelledby={`game-title-${game.gameId}`}
+              component="article"
+              key={game.gameId}
+              sx={{ maxWidth: 800, width: '100%' }}
+            >
+              <CardContent>
+                <Typography component="h3" gutterBottom id={`game-title-${game.gameId}`} variant="h6">
+                  {game.title}
+                </Typography>
+                <Typography color="text.secondary" id={`game-description-${game.gameId}`} variant="body2">
+                  {game.description}
+                </Typography>
+              </CardContent>
+              <CardActions sx={{ justifyContent: 'center' }}>
+                <Button
+                  aria-label={`Play ${game.title}`}
+                  onClick={() => handleGameSelect(game.gameId)}
+                  size="large"
+                  sx={{ maxWidth: '100%', width: '250px' }}
+                >
+                  Play
+                </Button>
+              </CardActions>
+            </Card>
           ))}
-        </Grid>
+        </Box>
       )}
     </Box>
   )
