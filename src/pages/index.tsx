@@ -1,14 +1,12 @@
-import { navigate } from 'gatsby'
-import React, { useEffect } from 'react'
+import React from 'react'
+
+import GameBrowser from '@components/game-browser'
+import { useCyoaGames } from '@hooks/useCyoaGames'
 
 const Index = (): React.ReactNode => {
-  useEffect(() => {
-    const today = new Date()
-    const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-    navigate(`/g/${dateString}`)
-  }, [])
+  const { errorMessage, games, isLoading } = useCyoaGames()
 
-  return null
+  return <GameBrowser errorMessage={errorMessage} games={games} loading={isLoading} />
 }
 
 export const Head = () => <title>Choose Your Own Adventure | dbowland.com</title>
