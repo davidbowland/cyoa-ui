@@ -26,6 +26,6 @@ describe('400 error page', () => {
   it('renders Head', () => {
     render(<Head />)
 
-    expect(document.title).toEqual('Connections | 400: Bad Request')
+    expect(document.title).toEqual('Choose Your Own Adventure | 400: Bad Request')
   })
 })

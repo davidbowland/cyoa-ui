@@ -29,6 +29,6 @@ describe('Index page', () => {
 
   it('renders Head with correct title', () => {
     render(<Head />)
-    expect(document.title).toEqual('Connections | dbowland.com')
+    expect(document.title).toEqual('Choose Your Own Adventure | dbowland.com')
   })
 })

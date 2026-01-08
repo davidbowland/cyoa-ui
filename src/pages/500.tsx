@@ -11,6 +11,6 @@ const InternalServerError = (): React.ReactNode => {
   )
 }
 
-export const Head = () => <title>Connections | 500: Internal Server Error</title>
+export const Head = () => <title>Choose Your Own Adventure | 500: Internal Server Error</title>
 
 export default InternalServerError

@@ -16,6 +16,6 @@ const Forbidden = (): React.ReactNode => {
   return <></>
 }
 
-export const Head = () => <title>Connections | 403: Forbidden</title>
+export const Head = () => <title>Choose Your Own Adventure | 403: Forbidden</title>
 
 export default Forbidden

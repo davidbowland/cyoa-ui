@@ -47,6 +47,6 @@ describe('403 error page', () => {
   it('renders Head', () => {
     render(<Head />)
 
-    expect(document.title).toEqual('Connections | 403: Forbidden')
+    expect(document.title).toEqual('Choose Your Own Adventure | 403: Forbidden')
   })
 })

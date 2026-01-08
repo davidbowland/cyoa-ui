@@ -14,6 +14,6 @@ const PrivacyPage = (): React.ReactNode => {
   )
 }
 
-export const Head = () => <title>Connections | Privacy Policy</title>
+export const Head = () => <title>Choose Your Own Adventure | Privacy Policy</title>
 
 export default PrivacyPage

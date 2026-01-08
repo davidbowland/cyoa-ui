@@ -11,6 +11,6 @@ const BadRequest = (): React.ReactNode => {
   )
 }
 
-export const Head = () => <title>Connections | 400: Bad Request</title>
+export const Head = () => <title>Choose Your Own Adventure | 400: Bad Request</title>
 
 export default BadRequest

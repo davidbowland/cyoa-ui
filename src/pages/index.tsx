@@ -11,6 +11,6 @@ const Index = (): React.ReactNode => {
   return null
 }
 
-export const Head = () => <title>Connections | dbowland.com</title>
+export const Head = () => <title>Choose Your Own Adventure | dbowland.com</title>
 
 export default Index

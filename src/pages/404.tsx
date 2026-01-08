@@ -16,6 +16,6 @@ const NotFound = (): React.ReactNode => {
   return <></>
 }
 
-export const Head = () => <title>Connections | 404: Not Found</title>
+export const Head = () => <title>Choose Your Own Adventure | 404: Not Found</title>
 
 export default NotFound

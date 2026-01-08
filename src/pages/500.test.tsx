@@ -26,6 +26,6 @@ describe('500 error page', () => {
   it('renders Head', () => {
     render(<Head />)
 
-    expect(document.title).toEqual('Connections | 500: Internal Server Error')
+    expect(document.title).toEqual('Choose Your Own Adventure | 500: Internal Server Error')
   })
 })

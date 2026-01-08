@@ -47,6 +47,6 @@ describe('404 error page', () => {
   it('renders Head', () => {
     render(<Head />)
 
-    expect(document.title).toEqual('Connections | 404: Not Found')
+    expect(document.title).toEqual('Choose Your Own Adventure | 404: Not Found')
   })
 })

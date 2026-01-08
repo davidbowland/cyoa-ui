@@ -21,6 +21,6 @@ describe('Privacy page', () => {
   it('renders Head', () => {
     render(<Head />)
 
-    expect(document.title).toEqual('Connections | Privacy Policy')
+    expect(document.title).toEqual('Choose Your Own Adventure | Privacy Policy')
   })
 })
