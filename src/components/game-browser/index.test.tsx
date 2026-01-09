@@ -69,8 +69,28 @@ describe('GameBrowser component', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     const playButtons = screen.getAllByText('Play')
-    await user.click(playButtons[1])
+    // Each game has 2 buttons (mobile + desktop), so second game's first button is at index 2
+    await user.click(playButtons[2])
 
     expect(navigate).toHaveBeenCalledWith('/story/game-2')
+  })
+
+  test('expect rendering GameBrowser displays image when game has image property', () => {
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
+
+    const gameImage = screen.getByAltText('Test Adventure 1 cover image')
+    expect(gameImage).toBeInTheDocument()
+    expect(gameImage).toHaveAttribute(
+      'src',
+      `${process.env.GATSBY_CYOA_ASSETS_BASE_URL}/images/https://example.com/image1.jpg`,
+    )
+  })
+
+  test('expect rendering GameBrowser displays MenuBook icon when game has no image', () => {
+    render(<GameBrowser games={mockCyoaGames} loading={false} />)
+
+    // The MenuBook icon should be present for the second game (Test Adventure 2) which has no image
+    const iconContainer = document.querySelector('[data-testid="MenuBookIcon"]')
+    expect(iconContainer).toBeInTheDocument()
   })
 })

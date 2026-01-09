@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography'
 
 import { InventoryItem } from '@types'
 
+const assetsBaseUrl = process.env.GATSBY_CYOA_ASSETS_BASE_URL
+
 export interface InventoryDisplayProps {
   items: InventoryItem[]
 }
@@ -32,7 +34,7 @@ const InventoryDisplay = ({ items }: InventoryDisplayProps): React.ReactNode => 
                   alt={item.name}
                   component="img"
                   height="120"
-                  image={`images/${item.image}`}
+                  image={`${assetsBaseUrl}/images/${item.image}`}
                   sx={{ objectFit: 'cover' }}
                 />
               )}

@@ -26,11 +26,11 @@ describe('InventoryDisplay component', () => {
 
     const swordImage = screen.getByAltText('sword')
     expect(swordImage).toBeInTheDocument()
-    expect(swordImage).toHaveAttribute('src', 'images/sword.png')
+    expect(swordImage).toHaveAttribute('src', `${process.env.GATSBY_CYOA_ASSETS_BASE_URL}/images/sword.png`)
 
     const potionImage = screen.getByAltText('potion')
     expect(potionImage).toBeInTheDocument()
-    expect(potionImage).toHaveAttribute('src', 'images/potion.png')
+    expect(potionImage).toHaveAttribute('src', `${process.env.GATSBY_CYOA_ASSETS_BASE_URL}/images/potion.png`)
   })
 
   test('expect rendering InventoryDisplay handles items without images', () => {
