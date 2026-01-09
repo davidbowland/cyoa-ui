@@ -13,8 +13,6 @@ import Typography from '@mui/material/Typography'
 
 import { CyoaGameBulk, GameId } from '@types'
 
-const assetsBaseUrl = process.env.GATSBY_CYOA_ASSETS_BASE_URL
-
 export interface GameBrowserProps {
   games: CyoaGameBulk[]
   loading: boolean
@@ -43,7 +41,7 @@ const GameCard = ({ game, onGameSelect }: GameCardProps): React.ReactNode => (
         <CardMedia
           alt={`${game.title} cover image`}
           component="img"
-          image={`${assetsBaseUrl}/images/${game.image}`}
+          image={game.image}
           sx={{
             height: { md: 'auto', xs: 150 },
             maxHeight: { md: 'none', xs: '100%' },

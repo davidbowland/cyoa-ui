@@ -29,7 +29,7 @@ const ChoiceHandler = ({ options, onChoiceSelect, disabled }: ChoiceHandlerProps
           key={`option-${index}`}
           onClick={handleChoiceClick(index)}
           size="large"
-          variant="outlined"
+          variant="contained"
         >
           {option.name}
         </Button>

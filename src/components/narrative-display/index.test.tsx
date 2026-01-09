@@ -156,4 +156,66 @@ describe('NarrativeDisplay component', () => {
 
     expect(screen.queryByText('Inventory')).not.toBeInTheDocument()
   })
+
+  test('expect rendering NarrativeDisplay shows resource value with starting value when current is less than starting', () => {
+    const gameWithLowerResource = {
+      ...mockCyoaGame,
+      lossResourceThreshold: 10,
+      startingResourceValue: 100,
+    }
+    const narrativeWithLowerResource = {
+      ...mockNarrative,
+      currentResourceValue: 75,
+    }
+
+    render(
+      <NarrativeDisplay
+        game={gameWithLowerResource}
+        loading={false}
+        narrative={narrativeWithLowerResource}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    expect(
+      screen.getByText((content, element) => {
+        return (
+          element?.tagName === 'DIV' &&
+          element?.className.includes('MuiTypography-root') &&
+          element?.textContent === 'Health: 75 / 100'
+        )
+      }),
+    ).toBeInTheDocument()
+  })
+
+  test('expect rendering NarrativeDisplay shows resource value with loss threshold when current equals or exceeds starting', () => {
+    const gameWithHigherResource = {
+      ...mockCyoaGame,
+      lossResourceThreshold: 10,
+      startingResourceValue: 100,
+    }
+    const narrativeWithHigherResource = {
+      ...mockNarrative,
+      currentResourceValue: 120,
+    }
+
+    render(
+      <NarrativeDisplay
+        game={gameWithHigherResource}
+        loading={false}
+        narrative={narrativeWithHigherResource}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    expect(
+      screen.getByText((content, element) => {
+        return (
+          element?.tagName === 'DIV' &&
+          element?.className.includes('MuiTypography-root') &&
+          element?.textContent === 'Health: 120 / 10'
+        )
+      }),
+    ).toBeInTheDocument()
+  })
 })

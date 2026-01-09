@@ -80,10 +80,7 @@ describe('GameBrowser component', () => {
 
     const gameImage = screen.getByAltText('Test Adventure 1 cover image')
     expect(gameImage).toBeInTheDocument()
-    expect(gameImage).toHaveAttribute(
-      'src',
-      `${process.env.GATSBY_CYOA_ASSETS_BASE_URL}/images/https://example.com/image1.jpg`,
-    )
+    expect(gameImage).toHaveAttribute('src', 'https://example.com/image1.jpg')
   })
 
   test('expect rendering GameBrowser displays MenuBook icon when game has no image', () => {

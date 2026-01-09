@@ -11,6 +11,8 @@ export interface CyoaGame {
   image?: string
   resourceName: string
   initialNarrativeId: NarrativeId
+  startingResourceValue: number
+  lossResourceThreshold: number
 }
 
 export interface CyoaGameBulk extends CyoaGame {
@@ -23,6 +25,7 @@ export interface InventoryItem {
 }
 
 export interface Narrative {
+  chapterTitle: string
   narrative: string
   choice: string
   options: CyoaOption[]

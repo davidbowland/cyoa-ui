@@ -6,7 +6,9 @@ import { Theme, CyoaGame, CyoaGameBulk, Narrative } from '@types'
 export const mockCyoaGame: CyoaGame = {
   description: 'A test adventure',
   initialNarrativeId: 'start',
+  lossResourceThreshold: 0,
   resourceName: 'Health',
+  startingResourceValue: 100,
   title: 'Test Adventure',
 }
 
@@ -21,19 +23,24 @@ export const mockCyoaGames: CyoaGameBulk[] = [
     gameId: 'game-1',
     image: 'https://example.com/image1.jpg',
     initialNarrativeId: 'start',
+    lossResourceThreshold: 0,
     resourceName: 'Health',
+    startingResourceValue: 100,
     title: 'Test Adventure 1',
   },
   {
     description: 'Another exciting journey',
     gameId: 'game-2',
     initialNarrativeId: 'begin',
+    lossResourceThreshold: 0,
     resourceName: 'Energy',
+    startingResourceValue: 50,
     title: 'Test Adventure 2',
   },
 ]
 
 export const mockNarrative: Narrative = {
+  chapterTitle: 'The Forest Crossroads',
   choice: 'What do you do?',
   currentResourceValue: 100,
   inventory: [

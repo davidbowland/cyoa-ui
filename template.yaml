@@ -85,7 +85,6 @@ Resources:
           - ErrorCode: 500
             ResponseCode: 500
             ResponsePagePath: /500/index.html
-        CacheBehaviors:
         DefaultCacheBehavior:
           AllowedMethods:
             - 'GET'

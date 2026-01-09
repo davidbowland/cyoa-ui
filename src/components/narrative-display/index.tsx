@@ -51,16 +51,25 @@ const NarrativeDisplay = ({
       <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2, p: 3 }}>
         <Skeleton height={40} variant="text" width="60%" />
         <Paper sx={{ maxWidth: 800, p: 3, width: '100%' }}>
+          <Box sx={{ mb: 3, textAlign: 'center' }}>
+            <Skeleton height={48} sx={{ borderRadius: 1, mx: 'auto' }} variant="rectangular" width={120} />
+          </Box>
+
+          <Divider sx={{ my: 2 }} />
+
+          <Skeleton height={40} sx={{ mx: 'auto' }} variant="text" width="50%" />
+
           <Skeleton height={20} sx={{ mt: 2 }} variant="text" />
           <Skeleton height={20} variant="text" />
           <Skeleton height={20} variant="text" width="80%" />
+
           <Divider sx={{ my: 2 }} />
-          <Skeleton height={24} variant="text" width="40%" />
-          <Skeleton height={32} sx={{ mt: 1 }} variant="rectangular" width={80} />
-          <Skeleton height={32} sx={{ mt: 1 }} variant="rectangular" width={100} />
-          <Divider sx={{ my: 2 }} />
-          <Skeleton height={24} variant="text" width="30%" />
-          <Skeleton height={36} sx={{ mt: 1 }} variant="rectangular" width="100%" />
+
+          <Skeleton height={40} sx={{ mx: 'auto' }} variant="text" width="30%" />
+
+          <Skeleton height={20} sx={{ mt: 1 }} variant="text" width="90%" />
+
+          <Skeleton height={36} sx={{ mt: 2 }} variant="rectangular" width="100%" />
           <Skeleton height={36} sx={{ mt: 1 }} variant="rectangular" width="100%" />
         </Paper>
         <Button onClick={handleBack} startIcon={<ArrowBackIcon />} variant="outlined">
@@ -77,26 +86,52 @@ const NarrativeDisplay = ({
       </Typography>
 
       <Paper sx={{ maxWidth: 800, p: 3, width: '100%' }}>
+        <Box sx={{ mb: 3, textAlign: 'center' }}>
+          <Paper
+            elevation={2}
+            sx={{
+              backgroundColor: 'primary.light',
+              color: 'primary.contrastText',
+              display: 'inline-block',
+              px: 3,
+              py: 1.5,
+            }}
+          >
+            <Typography component="div" variant="body1">
+              {game.resourceName}:{' '}
+              <span style={{ whiteSpace: 'nowrap' }}>
+                {narrative.currentResourceValue < game.startingResourceValue
+                  ? `${narrative.currentResourceValue} / ${game.startingResourceValue}`
+                  : `${narrative.currentResourceValue} / ${game.lossResourceThreshold}`}
+              </span>
+            </Typography>
+          </Paper>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        <Typography component="h4" gutterBottom sx={{ textAlign: 'center' }} variant="h4">
+          {narrative.chapterTitle}
+        </Typography>
+
         <Typography component="p" sx={{ mb: 2, whiteSpace: 'pre-wrap' }} variant="body1">
           {narrative.narrative}
         </Typography>
 
-        <Divider sx={{ my: 2 }} />
-
-        <Box sx={{ mb: 2 }}>
-          <Typography component="h2" gutterBottom variant="h6">
-            Current Status
-          </Typography>
-          <Typography component="p" variant="body2">
-            <strong>{game.resourceName}:</strong> {narrative.currentResourceValue}
-          </Typography>
-        </Box>
-
-        <InventoryDisplay items={narrative.inventory} />
+        {narrative.inventory && narrative.inventory.length > 0 && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <InventoryDisplay items={narrative.inventory} />
+          </>
+        )}
 
         <Divider sx={{ my: 2 }} />
 
-        <Typography component="h3" gutterBottom variant="h6">
+        <Typography component="h4" gutterBottom sx={{ textAlign: 'center' }} variant="h4">
+          Decision
+        </Typography>
+
+        <Typography component="p" gutterBottom sx={{ fontWeight: 'bold', paddingBottom: '2em' }} variant="body1">
           {narrative.choice}
         </Typography>
 
