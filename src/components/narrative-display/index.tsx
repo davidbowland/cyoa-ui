@@ -59,6 +59,8 @@ const NarrativeDisplay = ({
 
           <Skeleton height={40} sx={{ mx: 'auto' }} variant="text" width="50%" />
 
+          <Skeleton height={200} sx={{ borderRadius: 1, mt: 2 }} variant="rectangular" width="100%" />
+
           <Skeleton height={20} sx={{ mt: 2 }} variant="text" />
           <Skeleton height={20} variant="text" />
           <Skeleton height={20} variant="text" width="80%" />
@@ -81,7 +83,7 @@ const NarrativeDisplay = ({
 
   return (
     <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2, p: 3 }}>
-      <Typography component="h1" sx={{ textAlign: 'center' }} variant="h4">
+      <Typography component="h3" sx={{ textAlign: 'center' }} variant="h3">
         {game.title}
       </Typography>
 
@@ -90,13 +92,30 @@ const NarrativeDisplay = ({
           <Paper
             elevation={2}
             sx={{
+              alignItems: 'center',
               backgroundColor: 'primary.light',
               color: 'primary.contrastText',
-              display: 'inline-block',
+              display: 'flex',
+              gap: 1,
+              justifyContent: 'center',
+              margin: '0 auto',
+              maxWidth: '350px',
               px: 3,
               py: 1.5,
             }}
           >
+            {game.resourceImage && (
+              <Box
+                alt={game.resourceName}
+                component="img"
+                src={game.resourceImage}
+                sx={{
+                  height: 48,
+                  objectFit: 'contain',
+                  width: 48,
+                }}
+              />
+            )}
             <Typography component="div" variant="body1">
               {game.resourceName}:{' '}
               <span style={{ whiteSpace: 'nowrap' }}>
@@ -114,6 +133,23 @@ const NarrativeDisplay = ({
           {narrative.chapterTitle}
         </Typography>
 
+        {narrative.image && (
+          <Box sx={{ mb: 2, textAlign: 'center' }}>
+            <Box
+              alt={narrative.chapterTitle}
+              component="img"
+              src={narrative.image}
+              sx={{
+                aspectRatio: '16/9',
+                borderRadius: 1,
+                maxWidth: '100%',
+                objectFit: 'cover',
+                width: '100%',
+              }}
+            />
+          </Box>
+        )}
+
         <Typography component="p" sx={{ mb: 2, whiteSpace: 'pre-wrap' }} variant="body1">
           {narrative.narrative}
         </Typography>
@@ -127,7 +163,7 @@ const NarrativeDisplay = ({
 
         <Divider sx={{ my: 2 }} />
 
-        <Typography component="h4" gutterBottom sx={{ textAlign: 'center' }} variant="h4">
+        <Typography component="h5" gutterBottom sx={{ textAlign: 'center' }} variant="h5">
           Decision
         </Typography>
 

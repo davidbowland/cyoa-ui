@@ -8,6 +8,7 @@ export const mockCyoaGame: CyoaGame = {
   initialNarrativeId: 'start',
   lossResourceThreshold: 0,
   resourceName: 'Health',
+  resourceImage: 'health-icon.png',
   startingResourceValue: 100,
   title: 'Test Adventure',
 }
@@ -25,6 +26,7 @@ export const mockCyoaGames: CyoaGameBulk[] = [
     initialNarrativeId: 'start',
     lossResourceThreshold: 0,
     resourceName: 'Health',
+    resourceImage: 'health-icon.png',
     startingResourceValue: 100,
     title: 'Test Adventure 1',
   },
@@ -43,6 +45,7 @@ export const mockNarrative: Narrative = {
   chapterTitle: 'The Forest Crossroads',
   choice: 'What do you do?',
   currentResourceValue: 100,
+  image: 'forest-crossroads.jpg',
   inventory: [
     { image: 'sword.png', name: 'sword' },
     { image: 'potion.png', name: 'potion' },

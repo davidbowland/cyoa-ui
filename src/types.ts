@@ -10,6 +10,7 @@ export interface CyoaGame {
   description: string
   image?: string
   resourceName: string
+  resourceImage?: string
   initialNarrativeId: NarrativeId
   startingResourceValue: number
   lossResourceThreshold: number
@@ -26,6 +27,7 @@ export interface InventoryItem {
 
 export interface Narrative {
   chapterTitle: string
+  image?: string
   narrative: string
   choice: string
   options: CyoaOption[]

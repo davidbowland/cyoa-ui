@@ -20,7 +20,7 @@ const InventoryDisplay = ({ items }: InventoryDisplayProps): React.ReactNode => 
 
   return (
     <Box sx={{ mb: 2 }}>
-      <Typography component="h3" gutterBottom variant="h6">
+      <Typography component="h5" gutterBottom sx={{ textAlign: 'center' }} variant="h5">
         Inventory
       </Typography>
       <Grid container spacing={2}>

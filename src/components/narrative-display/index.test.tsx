@@ -218,4 +218,70 @@ describe('NarrativeDisplay component', () => {
       }),
     ).toBeInTheDocument()
   })
+
+  test('expect rendering NarrativeDisplay displays narrative image when available', () => {
+    render(
+      <NarrativeDisplay
+        game={mockCyoaGame}
+        loading={false}
+        narrative={mockNarrative}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    const narrativeImage = screen.getByAltText('The Forest Crossroads')
+    expect(narrativeImage).toBeInTheDocument()
+    expect(narrativeImage).toHaveAttribute('src', 'forest-crossroads.jpg')
+  })
+
+  test('expect rendering NarrativeDisplay hides narrative image when not available', () => {
+    const narrativeWithoutImage = {
+      ...mockNarrative,
+      image: undefined,
+    }
+
+    render(
+      <NarrativeDisplay
+        game={mockCyoaGame}
+        loading={false}
+        narrative={narrativeWithoutImage}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    expect(screen.queryByAltText('The Forest Crossroads')).not.toBeInTheDocument()
+  })
+
+  test('expect rendering NarrativeDisplay displays resource image when available', () => {
+    render(
+      <NarrativeDisplay
+        game={mockCyoaGame}
+        loading={false}
+        narrative={mockNarrative}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    const resourceImage = screen.getByAltText('Health')
+    expect(resourceImage).toBeInTheDocument()
+    expect(resourceImage).toHaveAttribute('src', 'health-icon.png')
+  })
+
+  test('expect rendering NarrativeDisplay hides resource image when not available', () => {
+    const gameWithoutResourceImage = {
+      ...mockCyoaGame,
+      resourceImage: undefined,
+    }
+
+    render(
+      <NarrativeDisplay
+        game={gameWithoutResourceImage}
+        loading={false}
+        narrative={mockNarrative}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    expect(screen.queryByAltText('Health')).not.toBeInTheDocument()
+  })
 })
