@@ -8,6 +8,8 @@ import NarrativeDisplay from '@components/narrative-display'
 import { fetchCyoaGame, fetchNarrative } from '@services/cyoa'
 import { CyoaGame, GameId, Narrative, NarrativeId } from '@types'
 
+const POLL_TIME_MS = 2_000
+
 export interface StoryEngineProps {
   gameId: GameId
 }
@@ -15,52 +17,57 @@ export interface StoryEngineProps {
 const StoryEngine = ({ gameId }: StoryEngineProps): React.ReactNode => {
   const [currentGame, setCurrentGame] = useState<CyoaGame | null>(null)
   const [currentNarrative, setCurrentNarrative] = useState<Narrative | null>(null)
-  const [narrativeId, setNarrativeId] = useState<NarrativeId>('')
-  const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [narrativeId, setNarrativeId] = useState<NarrativeId>('')
+
+  const pollForNarrative = useCallback(async (gameId: GameId, narrativeId: NarrativeId): Promise<void> => {
+    try {
+      const { data: narrative, isGenerating } = await fetchNarrative(gameId, narrativeId)
+      if (isGenerating) {
+        setTimeout(pollForNarrative, POLL_TIME_MS, gameId, narrativeId)
+        return
+      }
+      setCurrentNarrative(narrative)
+      setIsLoading(false)
+    } catch (error: unknown) {
+      console.error('pollForNarrative', { error })
+      setError('Failed to load next story segment. Please try again.')
+      setIsLoading(false)
+    }
+  }, [])
 
   const loadInitialGame = useCallback(async (): Promise<void> => {
     try {
-      setLoading(true)
+      setIsLoading(true)
       setError(null)
 
       const game = await fetchCyoaGame(gameId)
       setCurrentGame(game)
       setNarrativeId(game.initialNarrativeId)
 
-      const narrative = await fetchNarrative(gameId, game.initialNarrativeId)
-      setCurrentNarrative(narrative)
-      setLoading(false)
+      await pollForNarrative(gameId, game.initialNarrativeId)
     } catch (error: unknown) {
       console.error('loadInitialGame', { error })
       setError('Failed to load game. Please refresh the page to try again.')
       setCurrentGame(null)
       setCurrentNarrative(null)
-      setLoading(false)
+      setIsLoading(false)
     }
-  }, [gameId])
+  }, [gameId, pollForNarrative])
 
   const handleChoiceSelect = useCallback(
     async (optionIndex: number): Promise<void> => {
       if (!currentNarrative) return
 
-      try {
-        setLoading(true)
-        setError(null)
+      setIsLoading(true)
+      setError(null)
 
-        const nextNarrativeId = `${narrativeId}-${optionIndex}`
-        const narrative = await fetchNarrative(gameId, nextNarrativeId)
-
-        setCurrentNarrative(narrative)
-        setNarrativeId(nextNarrativeId)
-        setLoading(false)
-      } catch (error: unknown) {
-        console.error('handleChoiceSelect', { error })
-        setError('Failed to load next story segment. Please try again.')
-        setLoading(false)
-      }
+      const nextNarrativeId = `${narrativeId}-${optionIndex}`
+      setNarrativeId(nextNarrativeId)
+      await pollForNarrative(gameId, nextNarrativeId)
     },
-    [gameId, narrativeId, currentNarrative],
+    [gameId, narrativeId, currentNarrative, pollForNarrative],
   )
 
   const handleRetry = useCallback((): void => {
@@ -88,7 +95,7 @@ const StoryEngine = ({ gameId }: StoryEngineProps): React.ReactNode => {
     <NarrativeDisplay
       errorMessage={error}
       game={currentGame}
-      loading={loading}
+      loading={isLoading}
       narrative={currentNarrative}
       onChoiceSelect={handleChoiceSelect}
     />

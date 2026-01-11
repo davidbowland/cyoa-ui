@@ -17,7 +17,12 @@ export const fetchCyoaGame = async (gameId: GameId): Promise<CyoaGame> => {
   return response.data
 }
 
-export const fetchNarrative = async (gameId: GameId, narrativeId: NarrativeId): Promise<Narrative> => {
+interface NarrativeResponse {
+  data: Narrative
+  isGenerating: boolean
+}
+
+export const fetchNarrative = async (gameId: GameId, narrativeId: NarrativeId): Promise<NarrativeResponse> => {
   const response = await api.get(`/games/${gameId}/narratives/${narrativeId}`)
-  return response.data
+  return { data: response.data, isGenerating: response.status === 202 }
 }

@@ -46,13 +46,22 @@ describe('cyoa', () => {
   })
 
   describe('fetchNarrative', () => {
-    it('fetches a narrative for a game', async () => {
-      mockGet.mockResolvedValueOnce({ data: mockNarrative })
+    it('fetches a narrative for a game with 200 status', async () => {
+      mockGet.mockResolvedValueOnce({ data: mockNarrative, status: 200 })
 
       const result = await fetchNarrative('game-1', 'start')
 
       expect(mockGet).toHaveBeenCalledWith('/games/game-1/narratives/start')
-      expect(result).toEqual(mockNarrative)
+      expect(result).toEqual({ data: mockNarrative, isGenerating: false })
+    })
+
+    it('returns isGenerating true for 202 status', async () => {
+      mockGet.mockResolvedValueOnce({ data: mockNarrative, status: 202 })
+
+      const result = await fetchNarrative('game-1', 'start')
+
+      expect(mockGet).toHaveBeenCalledWith('/games/game-1/narratives/start')
+      expect(result).toEqual({ data: mockNarrative, isGenerating: true })
     })
 
     it('throws error on failure', async () => {
