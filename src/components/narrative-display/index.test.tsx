@@ -23,14 +23,14 @@ describe('NarrativeDisplay component', () => {
     jest.mocked(ChoiceHandler).mockReturnValue(<></>)
   })
 
-  test('expect rendering NarrativeDisplay shows loading state', () => {
+  it('renders loading state', () => {
     render(<NarrativeDisplay game={null} loading={true} narrative={null} onChoiceSelect={mockOnChoiceSelect} />)
 
     const skeletonElements = document.querySelectorAll('.MuiSkeleton-root')
     expect(skeletonElements.length).toBeGreaterThan(0)
   })
 
-  test('expect rendering NarrativeDisplay shows error message', () => {
+  it('shows error message', () => {
     const errorMessage = 'Failed to load story'
     render(
       <NarrativeDisplay
@@ -46,7 +46,7 @@ describe('NarrativeDisplay component', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay displays game title and narrative content', () => {
+  it('displays game title and narrative content', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -60,7 +60,7 @@ describe('NarrativeDisplay component', () => {
     expect(screen.getByText('You find yourself at a crossroads in the forest.')).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay shows current status', () => {
+  it('shows current status', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -74,7 +74,7 @@ describe('NarrativeDisplay component', () => {
     expect(screen.getByText(/100/)).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay shows current inventory', () => {
+  it('shows current inventory', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -89,7 +89,7 @@ describe('NarrativeDisplay component', () => {
     expect(screen.getByText('potion')).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay shows next choice prompt', () => {
+  it('shows next choice prompt', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -102,7 +102,7 @@ describe('NarrativeDisplay component', () => {
     expect(screen.getByText('What do you do?')).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay passes correct props to ChoiceHandler', () => {
+  it('passes correct props to ChoiceHandler', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -122,7 +122,7 @@ describe('NarrativeDisplay component', () => {
     )
   })
 
-  test('expect clicking Back button navigates to index', async () => {
+  it('navigates to index when Back button clicked', async () => {
     const user = userEvent.setup()
     render(
       <NarrativeDisplay
@@ -139,7 +139,7 @@ describe('NarrativeDisplay component', () => {
     expect(navigate).toHaveBeenCalledWith('/')
   })
 
-  test('expect rendering NarrativeDisplay hides inventory section when empty', () => {
+  it('hides inventory section when empty', () => {
     const emptyNarrative = {
       ...mockNarrative,
       inventory: [],
@@ -157,7 +157,43 @@ describe('NarrativeDisplay component', () => {
     expect(screen.queryByText('Inventory')).not.toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay shows resource value with starting value when current is less than starting', () => {
+  it('hides decision section when no choice', () => {
+    const emptyNarrative = {
+      ...mockNarrative,
+      choice: undefined,
+    }
+
+    render(
+      <NarrativeDisplay
+        game={mockCyoaGame}
+        loading={false}
+        narrative={emptyNarrative}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    expect(screen.queryByText('Decision')).not.toBeInTheDocument()
+  })
+
+  it('hides decision section when no options', () => {
+    const emptyNarrative = {
+      ...mockNarrative,
+      options: [],
+    }
+
+    render(
+      <NarrativeDisplay
+        game={mockCyoaGame}
+        loading={false}
+        narrative={emptyNarrative}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    expect(screen.queryByText('Decision')).not.toBeInTheDocument()
+  })
+
+  it('shows resource value with starting value when current is less than starting', () => {
     const gameWithLowerResource = {
       ...mockCyoaGame,
       lossResourceThreshold: 10,
@@ -188,7 +224,7 @@ describe('NarrativeDisplay component', () => {
     ).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay shows resource value with loss threshold when current equals or exceeds starting', () => {
+  it('shows resource value with loss threshold when current equals or exceeds starting', () => {
     const gameWithHigherResource = {
       ...mockCyoaGame,
       lossResourceThreshold: 10,
@@ -219,7 +255,7 @@ describe('NarrativeDisplay component', () => {
     ).toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay displays narrative image when available', () => {
+  it('displays narrative image when available', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -234,7 +270,7 @@ describe('NarrativeDisplay component', () => {
     expect(narrativeImage).toHaveAttribute('src', 'forest-crossroads.jpg')
   })
 
-  test('expect rendering NarrativeDisplay hides narrative image when not available', () => {
+  it('hides narrative image when not available', () => {
     const narrativeWithoutImage = {
       ...mockNarrative,
       image: undefined,
@@ -252,7 +288,7 @@ describe('NarrativeDisplay component', () => {
     expect(screen.queryByAltText('The Forest Crossroads')).not.toBeInTheDocument()
   })
 
-  test('expect rendering NarrativeDisplay displays resource image when available', () => {
+  it('displays resource image when available', () => {
     render(
       <NarrativeDisplay
         game={mockCyoaGame}
@@ -267,7 +303,7 @@ describe('NarrativeDisplay component', () => {
     expect(resourceImage).toHaveAttribute('src', 'health-icon.png')
   })
 
-  test('expect rendering NarrativeDisplay hides resource image when not available', () => {
+  it('hides resource image when not available', () => {
     const gameWithoutResourceImage = {
       ...mockCyoaGame,
       resourceImage: undefined,

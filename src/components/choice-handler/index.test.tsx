@@ -19,7 +19,7 @@ describe('ChoiceHandler component', () => {
     mockOnChoiceSelect.mockClear()
   })
 
-  test('expect rendering ChoiceHandler displays all options', () => {
+  it('displays all options', () => {
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
     expect(screen.getByText('Go left down the dark corridor')).toBeInTheDocument()
@@ -27,7 +27,7 @@ describe('ChoiceHandler component', () => {
     expect(screen.getByText('Turn back and retreat')).toBeInTheDocument()
   })
 
-  test('expect clicking first option calls onChoiceSelect with index 0', async () => {
+  it('calls onChoiceSelect with index 0 when first option clicked', async () => {
     const user = userEvent.setup()
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
@@ -37,7 +37,7 @@ describe('ChoiceHandler component', () => {
     expect(mockOnChoiceSelect).toHaveBeenCalledWith(0)
   })
 
-  test('expect clicking second option calls onChoiceSelect with index 1', async () => {
+  it('calls onChoiceSelect with index 1 when second option clicked', async () => {
     const user = userEvent.setup()
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
@@ -47,7 +47,7 @@ describe('ChoiceHandler component', () => {
     expect(mockOnChoiceSelect).toHaveBeenCalledWith(1)
   })
 
-  test('expect clicking third option calls onChoiceSelect with index 2', async () => {
+  it('calls onChoiceSelect with index 2 when third option clicked', async () => {
     const user = userEvent.setup()
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
@@ -57,13 +57,13 @@ describe('ChoiceHandler component', () => {
     expect(mockOnChoiceSelect).toHaveBeenCalledWith(2)
   })
 
-  test('expect disabled buttons do not trigger onChoiceSelect', () => {
+  it('does not trigger onChoiceSelect when disabled', () => {
     render(<ChoiceHandler disabled={true} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
     expect(mockOnChoiceSelect).not.toHaveBeenCalled()
   })
 
-  test('expect buttons are disabled when disabled prop is true', () => {
+  it('disables buttons when disabled prop is true', () => {
     render(<ChoiceHandler disabled={true} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
     const buttons = screen.getAllByRole('button')
@@ -72,7 +72,7 @@ describe('ChoiceHandler component', () => {
     })
   })
 
-  test('expect buttons are enabled when disabled prop is false', () => {
+  it('enables buttons when disabled prop is false', () => {
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)
 
     const buttons = screen.getAllByRole('button')
@@ -81,7 +81,7 @@ describe('ChoiceHandler component', () => {
     })
   })
 
-  test('expect empty options array renders no buttons', () => {
+  it('renders no buttons when options array is empty', () => {
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={[]} />)
 
     const buttons = screen.queryAllByRole('button')

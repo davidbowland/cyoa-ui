@@ -15,21 +15,21 @@ describe('StoryPage', () => {
     jest.mocked(StoryEngine).mockReturnValue(<div>Story Engine</div>)
   })
 
-  test('expect rendering StoryPage renders StoryEngine with correct gameId', () => {
+  it('renders StoryEngine with correct gameId', () => {
     render(<StoryPage params={{ gameId: 'test-game-123' }} />)
 
     expect(StoryEngine).toHaveBeenCalledWith({ gameId: 'test-game-123' }, {})
     expect(screen.getByText('Story Engine')).toBeInTheDocument()
   })
 
-  test('expect rendering StoryPage renders PrivacyLink', () => {
+  it('renders PrivacyLink', () => {
     render(<StoryPage params={{ gameId: 'test-game-123' }} />)
 
     expect(PrivacyLink).toHaveBeenCalled()
     expect(screen.getByText('Privacy Link')).toBeInTheDocument()
   })
 
-  test('expect rendering StoryPage has correct structure', () => {
+  it('has correct structure', () => {
     render(<StoryPage params={{ gameId: 'test-game-123' }} />)
 
     const main = screen.getByRole('main')

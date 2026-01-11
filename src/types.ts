@@ -29,7 +29,7 @@ export interface Narrative {
   chapterTitle: string
   image?: string
   narrative: string
-  choice: string
+  choice?: string
   options: CyoaOption[]
   inventory: InventoryItem[]
   currentResourceValue: number

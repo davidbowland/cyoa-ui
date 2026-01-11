@@ -12,7 +12,7 @@ describe('InventoryDisplay component', () => {
     { name: 'key' },
   ]
 
-  test('expect rendering InventoryDisplay shows inventory items', () => {
+  it('shows inventory items', () => {
     render(<InventoryDisplay items={mockInventoryItems} />)
 
     expect(screen.getByText('Inventory')).toBeInTheDocument()
@@ -21,7 +21,7 @@ describe('InventoryDisplay component', () => {
     expect(screen.getByText('key')).toBeInTheDocument()
   })
 
-  test('expect rendering InventoryDisplay shows images when available', () => {
+  it('shows images when available', () => {
     render(<InventoryDisplay items={mockInventoryItems} />)
 
     const swordImage = screen.getByAltText('sword')
@@ -33,7 +33,7 @@ describe('InventoryDisplay component', () => {
     expect(potionImage).toHaveAttribute('src', 'potion.png')
   })
 
-  test('expect rendering InventoryDisplay handles items without images', () => {
+  it('handles items without images', () => {
     const itemsWithoutImages: InventoryItem[] = [{ name: 'key' }, { name: 'note' }]
 
     render(<InventoryDisplay items={itemsWithoutImages} />)
@@ -45,7 +45,7 @@ describe('InventoryDisplay component', () => {
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
   })
 
-  test('expect rendering InventoryDisplay returns null when no items', () => {
+  it('returns null when no items', () => {
     const { container } = render(<InventoryDisplay items={[]} />)
 
     expect(container.firstChild).toBeNull()

@@ -26,7 +26,7 @@ describe('StoryEngine component', () => {
     console.error = jest.fn()
   })
 
-  test('expect rendering StoryEngine loads initial game and narrative', async () => {
+  it('loads initial game and narrative', async () => {
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest.mocked(fetchNarrative).mockResolvedValueOnce(mockNarrative)
 
@@ -49,7 +49,7 @@ describe('StoryEngine component', () => {
     )
   })
 
-  test('expect rendering StoryEngine shows loading state initially', () => {
+  it('shows loading state initially', () => {
     jest.mocked(fetchCyoaGame).mockImplementation(() => new Promise(() => {}))
     jest.mocked(fetchNarrative).mockImplementation(() => new Promise(() => {}))
 
@@ -67,7 +67,7 @@ describe('StoryEngine component', () => {
     )
   })
 
-  test('expect rendering StoryEngine handles game loading error', async () => {
+  it('handles game loading error', async () => {
     const error = new Error('Failed to load game')
     jest.mocked(fetchCyoaGame).mockRejectedValueOnce(error)
 
@@ -82,7 +82,7 @@ describe('StoryEngine component', () => {
     expect(screen.getByText('Retry')).toBeInTheDocument()
   })
 
-  test('expect rendering StoryEngine handles narrative loading error', async () => {
+  it('handles narrative loading error', async () => {
     const error = new Error('Failed to load narrative')
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest.mocked(fetchNarrative).mockRejectedValueOnce(error)
@@ -98,7 +98,7 @@ describe('StoryEngine component', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 
-  test('expect choice selection loads next narrative', async () => {
+  it('loads next narrative when choice selected', async () => {
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest.mocked(fetchNarrative).mockResolvedValueOnce(mockNarrative).mockResolvedValueOnce(mockNextNarrative)
 
@@ -134,7 +134,7 @@ describe('StoryEngine component', () => {
     )
   })
 
-  test('expect choice selection handles error', async () => {
+  it('handles choice selection error', async () => {
     const error = new Error('Failed to load next narrative')
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest.mocked(fetchNarrative).mockResolvedValueOnce(mockNarrative).mockRejectedValueOnce(error)
@@ -170,7 +170,7 @@ describe('StoryEngine component', () => {
     )
   })
 
-  test('expect retry button reloads initial game when no current game', async () => {
+  it('reloads initial game when retry clicked and no current game', async () => {
     const error = new Error('Failed to load game')
     jest.mocked(fetchCyoaGame).mockRejectedValueOnce(error).mockResolvedValueOnce(mockCyoaGame)
     jest.mocked(fetchNarrative).mockResolvedValueOnce(mockNarrative)
@@ -190,7 +190,7 @@ describe('StoryEngine component', () => {
     })
   })
 
-  test('expect choice selection does nothing when no current narrative', async () => {
+  it('does nothing when choice selected but no current narrative', async () => {
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest.mocked(fetchNarrative).mockResolvedValueOnce(mockNarrative)
 

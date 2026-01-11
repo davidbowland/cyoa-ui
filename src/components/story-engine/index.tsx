@@ -64,12 +64,8 @@ const StoryEngine = ({ gameId }: StoryEngineProps): React.ReactNode => {
   )
 
   const handleRetry = useCallback((): void => {
-    if (currentGame) {
-      handleChoiceSelect(0)
-    } else {
-      loadInitialGame()
-    }
-  }, [currentGame, handleChoiceSelect, loadInitialGame])
+    loadInitialGame()
+  }, [loadInitialGame])
 
   useEffect(() => {
     loadInitialGame()

@@ -16,13 +16,13 @@ describe('GameBrowser component', () => {
     jest.mocked(navigate).mockClear()
   })
 
-  test('expect rendering GameBrowser displays heading', () => {
+  it('displays heading', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     expect(screen.getByText('Choose Your Own Adventure')).toBeInTheDocument()
   })
 
-  test('expect rendering GameBrowser shows loading skeletons when loading', () => {
+  it('shows loading skeletons when loading', () => {
     render(<GameBrowser games={[]} loading={true} />)
 
     // Check for skeleton elements by class
@@ -30,7 +30,7 @@ describe('GameBrowser component', () => {
     expect(skeletonElements.length).toBeGreaterThan(0)
   })
 
-  test('expect rendering GameBrowser shows error message when error provided', () => {
+  it('shows error message when error provided', () => {
     const errorMessage = 'Failed to load games'
     render(<GameBrowser errorMessage={errorMessage} games={[]} loading={false} />)
 
@@ -38,14 +38,14 @@ describe('GameBrowser component', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument()
   })
 
-  test('expect rendering GameBrowser shows empty state when no games available', () => {
+  it('shows empty state when no games available', () => {
     render(<GameBrowser games={[]} loading={false} />)
 
     expect(screen.getByText('No games available at the moment')).toBeInTheDocument()
     expect(screen.getByText('Please check back later for new adventures')).toBeInTheDocument()
   })
 
-  test('expect rendering GameBrowser displays game list when games provided', () => {
+  it('displays game list when games provided', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     expect(screen.getByText('Test Adventure 1')).toBeInTheDocument()
@@ -54,7 +54,7 @@ describe('GameBrowser component', () => {
     expect(screen.getByText('Another exciting journey')).toBeInTheDocument()
   })
 
-  test('expect clicking Play button navigates to story page', async () => {
+  it('navigates to story page when Play button clicked', async () => {
     const user = userEvent.setup()
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
@@ -64,7 +64,7 @@ describe('GameBrowser component', () => {
     expect(navigate).toHaveBeenCalledWith('/story/game-1')
   })
 
-  test('expect clicking second Play button navigates to correct story page', async () => {
+  it('navigates to correct story page when second Play button clicked', async () => {
     const user = userEvent.setup()
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
@@ -75,7 +75,7 @@ describe('GameBrowser component', () => {
     expect(navigate).toHaveBeenCalledWith('/story/game-2')
   })
 
-  test('expect rendering GameBrowser displays image when game has image property', () => {
+  it('displays image when game has image property', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     const gameImage = screen.getByAltText('Test Adventure 1 cover image')
@@ -83,7 +83,7 @@ describe('GameBrowser component', () => {
     expect(gameImage).toHaveAttribute('src', 'https://example.com/image1.jpg')
   })
 
-  test('expect rendering GameBrowser displays MenuBook icon when game has no image', () => {
+  it('displays MenuBook icon when game has no image', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
     // The MenuBook icon should be present for the second game (Test Adventure 2) which has no image

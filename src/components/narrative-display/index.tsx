@@ -161,17 +161,21 @@ const NarrativeDisplay = ({
           </>
         )}
 
-        <Divider sx={{ my: 2 }} />
+        {narrative.choice && narrative.options.length > 0 && (
+          <>
+            <Divider sx={{ my: 2 }} />
 
-        <Typography component="h5" gutterBottom sx={{ textAlign: 'center' }} variant="h5">
-          Decision
-        </Typography>
+            <Typography component="h5" gutterBottom sx={{ textAlign: 'center' }} variant="h5">
+              Decision
+            </Typography>
 
-        <Typography component="p" gutterBottom sx={{ fontWeight: 'bold', paddingBottom: '2em' }} variant="body1">
-          {narrative.choice}
-        </Typography>
+            <Typography component="p" gutterBottom sx={{ fontWeight: 'bold', paddingBottom: '2em' }} variant="body1">
+              {narrative.choice}
+            </Typography>
 
-        <ChoiceHandler disabled={loading} onChoiceSelect={onChoiceSelect} options={narrative.options} />
+            <ChoiceHandler disabled={loading} onChoiceSelect={onChoiceSelect} options={narrative.options} />
+          </>
+        )}
       </Paper>
 
       <Button onClick={handleBack} startIcon={<ArrowBackIcon />} variant="outlined">
