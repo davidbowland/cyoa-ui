@@ -10,7 +10,7 @@ jest.mock('@components/privacy-link')
 jest.mock('@components/story-engine')
 
 describe('StoryPage', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.mocked(PrivacyLink).mockReturnValue(<div>Privacy Link</div>)
     jest.mocked(StoryEngine).mockReturnValue(<div>Story Engine</div>)
   })

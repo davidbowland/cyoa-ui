@@ -41,7 +41,6 @@ describe('InventoryDisplay component', () => {
     expect(screen.getByText('key')).toBeInTheDocument()
     expect(screen.getByText('note')).toBeInTheDocument()
 
-    // Should not have any images
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
   })
 

@@ -16,11 +16,15 @@ jest.mock('@components/choice-handler')
 
 describe('NarrativeDisplay component', () => {
   const mockOnChoiceSelect = jest.fn()
+  const mockScrollIntoView = jest.fn()
 
-  beforeEach(() => {
-    jest.mocked(navigate).mockClear()
-    mockOnChoiceSelect.mockClear()
-    jest.mocked(ChoiceHandler).mockReturnValue(<></>)
+  beforeAll(() => {
+    jest.mocked(ChoiceHandler).mockReturnValue(<>ChoiceHandler</>)
+
+    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+      configurable: true,
+      value: mockScrollIntoView,
+    })
   })
 
   it('renders loading state', () => {
@@ -113,13 +117,33 @@ describe('NarrativeDisplay component', () => {
     )
 
     expect(ChoiceHandler).toHaveBeenCalledWith(
-      {
+      expect.objectContaining({
         disabled: false,
-        onChoiceSelect: mockOnChoiceSelect,
         options: mockNarrative.options,
-      },
+      }),
       {},
     )
+  })
+
+  it('scrolls to narrative area and calls onChoiceSelect when choice is made', () => {
+    const mockMakeSelection = jest.fn()
+    jest.mocked(ChoiceHandler).mockImplementation(({ onChoiceSelect }) => {
+      mockMakeSelection.mockImplementation(onChoiceSelect)
+      return <>ChoiceHandler</>
+    })
+
+    render(
+      <NarrativeDisplay
+        game={mockCyoaGame}
+        loading={false}
+        narrative={mockNarrative}
+        onChoiceSelect={mockOnChoiceSelect}
+      />,
+    )
+
+    mockMakeSelection(1)
+
+    expect(mockScrollIntoView).toHaveBeenCalledTimes(1)
   })
 
   it('navigates to index when Back button clicked', async () => {
@@ -214,7 +238,7 @@ describe('NarrativeDisplay component', () => {
     )
 
     expect(
-      screen.getByText((content, element) => {
+      screen.getByText((_, element) => {
         return (
           element?.tagName === 'DIV' &&
           element?.className.includes('MuiTypography-root') &&
@@ -245,7 +269,7 @@ describe('NarrativeDisplay component', () => {
     )
 
     expect(
-      screen.getByText((content, element) => {
+      screen.getByText((_, element) => {
         return (
           element?.tagName === 'DIV' &&
           element?.className.includes('MuiTypography-root') &&

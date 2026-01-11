@@ -19,10 +19,8 @@ describe('StoryEngine component', () => {
     options: [{ name: 'Open it' }, { name: 'Leave it' }],
   }
 
-  beforeEach(() => {
-    jest.mocked(fetchCyoaGame).mockClear()
-    jest.mocked(fetchNarrative).mockClear()
-    jest.mocked(NarrativeDisplay).mockReturnValue(<></>)
+  beforeAll(() => {
+    jest.mocked(NarrativeDisplay).mockReturnValue(<>NarrativeDisplay</>)
     console.error = jest.fn()
   })
 
@@ -196,7 +194,6 @@ describe('StoryEngine component', () => {
 
     render(<StoryEngine gameId="test-game" />)
 
-    // Wait for initial load to complete
     await waitFor(() => {
       expect(fetchNarrative).toHaveBeenCalledTimes(1)
     })
@@ -206,7 +203,6 @@ describe('StoryEngine component', () => {
 
     onChoiceSelect(0)
 
-    // Should still only be called once (no additional call)
     expect(fetchNarrative).toHaveBeenCalledTimes(1)
   })
 })

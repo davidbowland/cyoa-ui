@@ -12,12 +12,7 @@ describe('ChoiceHandler component', () => {
     { name: 'Go right toward the light' },
     { name: 'Turn back and retreat' },
   ]
-
   const mockOnChoiceSelect = jest.fn()
-
-  beforeEach(() => {
-    mockOnChoiceSelect.mockClear()
-  })
 
   it('displays all options', () => {
     render(<ChoiceHandler disabled={false} onChoiceSelect={mockOnChoiceSelect} options={mockOptions} />)

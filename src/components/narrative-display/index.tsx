@@ -1,5 +1,5 @@
 import { navigate } from 'gatsby'
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Alert from '@mui/material/Alert'
@@ -32,6 +32,13 @@ const NarrativeDisplay = ({
   const handleBack = useCallback((): void => {
     navigate('/')
   }, [])
+
+  const narrativeArea = useRef<HTMLDivElement>(null)
+
+  const handleChoiceSelect = (optionIndex: number) => {
+    narrativeArea.current && narrativeArea.current.scrollIntoView()
+    onChoiceSelect(optionIndex)
+  }
 
   if (errorMessage) {
     return (
@@ -87,7 +94,7 @@ const NarrativeDisplay = ({
         {game.title}
       </Typography>
 
-      <Paper sx={{ maxWidth: 800, p: 3, width: '100%' }}>
+      <Paper ref={narrativeArea} sx={{ maxWidth: 800, p: 3, width: '100%' }}>
         <Box sx={{ mb: 3, textAlign: 'center' }}>
           <Paper
             elevation={2}
@@ -173,7 +180,7 @@ const NarrativeDisplay = ({
               {narrative.choice}
             </Typography>
 
-            <ChoiceHandler disabled={loading} onChoiceSelect={onChoiceSelect} options={narrative.options} />
+            <ChoiceHandler disabled={loading} onChoiceSelect={handleChoiceSelect} options={narrative.options} />
           </>
         )}
       </Paper>

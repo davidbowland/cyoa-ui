@@ -83,7 +83,6 @@ const GameCard = ({ game, onGameSelect }: GameCardProps): React.ReactNode => (
           </Typography>
         </CardContent>
 
-        {/* Mobile button - below description */}
         <Box
           sx={{
             alignItems: 'center',
@@ -104,7 +103,6 @@ const GameCard = ({ game, onGameSelect }: GameCardProps): React.ReactNode => (
         </Box>
       </Box>
 
-      {/* Desktop button - on the right */}
       <Box
         sx={{
           alignItems: 'center',
@@ -145,7 +143,6 @@ const LoadingSkeleton = (): React.ReactNode => (
               <Skeleton height={20} variant="text" width="80%" />
             </CardContent>
 
-            {/* Mobile skeleton button */}
             <Box
               sx={{
                 alignItems: 'center',
@@ -158,7 +155,6 @@ const LoadingSkeleton = (): React.ReactNode => (
             </Box>
           </Box>
 
-          {/* Desktop skeleton button */}
           <Box
             sx={{
               alignItems: 'center',

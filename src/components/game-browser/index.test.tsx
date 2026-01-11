@@ -12,10 +12,6 @@ jest.mock('gatsby', () => ({
 }))
 
 describe('GameBrowser component', () => {
-  beforeEach(() => {
-    jest.mocked(navigate).mockClear()
-  })
-
   it('displays heading', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
@@ -25,7 +21,6 @@ describe('GameBrowser component', () => {
   it('shows loading skeletons when loading', () => {
     render(<GameBrowser games={[]} loading={true} />)
 
-    // Check for skeleton elements by class
     const skeletonElements = document.querySelectorAll('.MuiSkeleton-root')
     expect(skeletonElements.length).toBeGreaterThan(0)
   })
@@ -86,7 +81,6 @@ describe('GameBrowser component', () => {
   it('displays MenuBook icon when game has no image', () => {
     render(<GameBrowser games={mockCyoaGames} loading={false} />)
 
-    // The MenuBook icon should be present for the second game (Test Adventure 2) which has no image
     const iconContainer = document.querySelector('[data-testid="MenuBookIcon"]')
     expect(iconContainer).toBeInTheDocument()
   })
