@@ -12,23 +12,23 @@ import Typography from '@mui/material/Typography'
 
 import ChoiceHandler from '@components/choice-handler'
 import InventoryDisplay from '@components/inventory-display'
-import { CyoaGame, Narrative } from '@types'
+import { CyoaGame, CyoaChoice } from '@types'
 
-export interface NarrativeDisplayProps {
+export interface ChoiceDisplayProps {
   game: CyoaGame | null
-  narrative: Narrative | null
+  choice: CyoaChoice | null
   loading: boolean
   errorMessage?: string | null
   onChoiceSelect: (optionIndex: number) => void
 }
 
-const NarrativeDisplay = ({
+const ChoiceDisplay = ({
   game,
-  narrative,
+  choice,
   loading,
   errorMessage,
   onChoiceSelect,
-}: NarrativeDisplayProps): React.ReactNode => {
+}: ChoiceDisplayProps): React.ReactNode => {
   const handleBack = useCallback((): void => {
     navigate('/')
   }, [])
@@ -53,7 +53,7 @@ const NarrativeDisplay = ({
     )
   }
 
-  if (loading || !game || !narrative) {
+  if (loading || !game || !choice) {
     return (
       <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2, p: 3 }}>
         <Skeleton height={40} variant="text" width="60%" />
@@ -126,9 +126,9 @@ const NarrativeDisplay = ({
             <Typography component="div" variant="body1">
               {game.resourceName}:{' '}
               <span style={{ whiteSpace: 'nowrap' }}>
-                {narrative.currentResourceValue < game.startingResourceValue
-                  ? `${narrative.currentResourceValue} / ${game.startingResourceValue}`
-                  : `${narrative.currentResourceValue} / ${game.lossResourceThreshold}`}
+                {choice.currentResourceValue < game.startingResourceValue
+                  ? `${choice.currentResourceValue} / ${game.startingResourceValue}`
+                  : `${choice.currentResourceValue} / ${game.lossResourceThreshold}`}
               </span>
             </Typography>
           </Paper>
@@ -137,15 +137,15 @@ const NarrativeDisplay = ({
         <Divider sx={{ my: 2 }} />
 
         <Typography component="h4" gutterBottom sx={{ textAlign: 'center' }} variant="h4">
-          {narrative.chapterTitle}
+          {choice.chapterTitle}
         </Typography>
 
-        {narrative.image && (
+        {choice.image && (
           <Box sx={{ mb: 2, textAlign: 'center' }}>
             <Box
-              alt={narrative.chapterTitle}
+              alt={choice.chapterTitle}
               component="img"
-              src={narrative.image}
+              src={choice.image}
               sx={{
                 aspectRatio: '16/9',
                 borderRadius: 1,
@@ -158,17 +158,17 @@ const NarrativeDisplay = ({
         )}
 
         <Typography component="p" sx={{ mb: 2, whiteSpace: 'pre-wrap' }} variant="body1">
-          {narrative.narrative}
+          {choice.narrative}
         </Typography>
 
-        {narrative.inventory && narrative.inventory.length > 0 && (
+        {choice.inventory && choice.inventory.length > 0 && (
           <>
             <Divider sx={{ my: 2 }} />
-            <InventoryDisplay items={narrative.inventory} />
+            <InventoryDisplay items={choice.inventory} />
           </>
         )}
 
-        {narrative.choice && narrative.options.length > 0 && (
+        {choice.choice && choice.options.length > 0 && (
           <>
             <Divider sx={{ my: 2 }} />
 
@@ -177,10 +177,10 @@ const NarrativeDisplay = ({
             </Typography>
 
             <Typography component="p" gutterBottom sx={{ fontWeight: 'bold', paddingBottom: '2em' }} variant="body1">
-              {narrative.choice}
+              {choice.choice}
             </Typography>
 
-            <ChoiceHandler disabled={loading} onChoiceSelect={handleChoiceSelect} options={narrative.options} />
+            <ChoiceHandler disabled={loading} onChoiceSelect={handleChoiceSelect} options={choice.options} />
           </>
         )}
       </Paper>
@@ -192,4 +192,4 @@ const NarrativeDisplay = ({
   )
 }
 
-export default NarrativeDisplay
+export default ChoiceDisplay

@@ -3,7 +3,7 @@ export { Theme } from '@mui/material/styles'
 // API
 
 export type GameId = string
-export type NarrativeId = string
+export type ChoiceId = string
 
 export interface CyoaGame {
   title: string
@@ -11,7 +11,7 @@ export interface CyoaGame {
   image?: string
   resourceName: string
   resourceImage?: string
-  initialNarrativeId: NarrativeId
+  initialChoiceId: ChoiceId
   startingResourceValue: number
   lossResourceThreshold: number
 }
@@ -25,7 +25,7 @@ export interface InventoryItem {
   image?: string
 }
 
-export interface Narrative {
+export interface CyoaChoice {
   chapterTitle: string
   image?: string
   narrative: string

@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event'
 import { navigate } from 'gatsby'
 import React from 'react'
 
-import { mockCyoaGame, mockNarrative } from '../../../test/__mocks__'
-import NarrativeDisplay from './index'
+import { mockCyoaGame, mockChoice } from '../../../test/__mocks__'
+import ChoiceDisplay from './index'
 import ChoiceHandler from '@components/choice-handler'
 
 jest.mock('gatsby', () => ({
@@ -14,7 +14,7 @@ jest.mock('gatsby', () => ({
 
 jest.mock('@components/choice-handler')
 
-describe('NarrativeDisplay component', () => {
+describe('ChoiceDisplay component', () => {
   const mockOnChoiceSelect = jest.fn()
   const mockScrollIntoView = jest.fn()
 
@@ -28,7 +28,7 @@ describe('NarrativeDisplay component', () => {
   })
 
   it('renders loading state', () => {
-    render(<NarrativeDisplay game={null} loading={true} narrative={null} onChoiceSelect={mockOnChoiceSelect} />)
+    render(<ChoiceDisplay choice={null} game={null} loading={true} onChoiceSelect={mockOnChoiceSelect} />)
 
     const skeletonElements = document.querySelectorAll('.MuiSkeleton-root')
     expect(skeletonElements.length).toBeGreaterThan(0)
@@ -37,11 +37,11 @@ describe('NarrativeDisplay component', () => {
   it('shows error message', () => {
     const errorMessage = 'Failed to load story'
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={mockChoice}
         errorMessage={errorMessage}
         game={mockCyoaGame}
         loading={false}
-        narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
@@ -52,12 +52,7 @@ describe('NarrativeDisplay component', () => {
 
   it('displays game title and narrative content', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     expect(screen.getByText('Test Adventure')).toBeInTheDocument()
@@ -66,12 +61,7 @@ describe('NarrativeDisplay component', () => {
 
   it('shows current status', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     expect(screen.getByText(/Health/)).toBeInTheDocument()
@@ -80,12 +70,7 @@ describe('NarrativeDisplay component', () => {
 
   it('shows current inventory', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     expect(screen.getByText('Inventory')).toBeInTheDocument()
@@ -95,12 +80,7 @@ describe('NarrativeDisplay component', () => {
 
   it('shows next choice prompt', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     expect(screen.getByText('What do you do?')).toBeInTheDocument()
@@ -108,18 +88,13 @@ describe('NarrativeDisplay component', () => {
 
   it('passes correct props to ChoiceHandler', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     expect(ChoiceHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         disabled: false,
-        options: mockNarrative.options,
+        options: mockChoice.options,
       }),
       {},
     )
@@ -133,12 +108,7 @@ describe('NarrativeDisplay component', () => {
     })
 
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     mockMakeSelection(1)
@@ -149,12 +119,7 @@ describe('NarrativeDisplay component', () => {
   it('navigates to index when Back button clicked', async () => {
     const user = userEvent.setup()
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     const backButton = screen.getByText('Back to games list')
@@ -164,16 +129,16 @@ describe('NarrativeDisplay component', () => {
   })
 
   it('hides inventory section when empty', () => {
-    const emptyNarrative = {
-      ...mockNarrative,
+    const emptyInventoryChoice = {
+      ...mockChoice,
       inventory: [],
     }
 
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={emptyInventoryChoice}
         game={mockCyoaGame}
         loading={false}
-        narrative={emptyNarrative}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
@@ -182,34 +147,29 @@ describe('NarrativeDisplay component', () => {
   })
 
   it('hides decision section when no choice', () => {
-    const emptyNarrative = {
-      ...mockNarrative,
+    const emptyChoice = {
+      ...mockChoice,
       choice: undefined,
     }
 
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={emptyNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={emptyChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     expect(screen.queryByText('Decision')).not.toBeInTheDocument()
   })
 
   it('hides decision section when no options', () => {
-    const emptyNarrative = {
-      ...mockNarrative,
+    const emptyOptionsChoice = {
+      ...mockChoice,
       options: [],
     }
 
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={emptyOptionsChoice}
         game={mockCyoaGame}
         loading={false}
-        narrative={emptyNarrative}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
@@ -223,16 +183,16 @@ describe('NarrativeDisplay component', () => {
       lossResourceThreshold: 10,
       startingResourceValue: 100,
     }
-    const narrativeWithLowerResource = {
-      ...mockNarrative,
+    const choiceWithLowerResource = {
+      ...mockChoice,
       currentResourceValue: 75,
     }
 
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={choiceWithLowerResource}
         game={gameWithLowerResource}
         loading={false}
-        narrative={narrativeWithLowerResource}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
@@ -254,16 +214,16 @@ describe('NarrativeDisplay component', () => {
       lossResourceThreshold: 10,
       startingResourceValue: 100,
     }
-    const narrativeWithHigherResource = {
-      ...mockNarrative,
+    const choiceWithHigherResource = {
+      ...mockChoice,
       currentResourceValue: 120,
     }
 
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={choiceWithHigherResource}
         game={gameWithHigherResource}
         loading={false}
-        narrative={narrativeWithHigherResource}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
@@ -279,32 +239,27 @@ describe('NarrativeDisplay component', () => {
     ).toBeInTheDocument()
   })
 
-  it('displays narrative image when available', () => {
+  it('displays choice image when available', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
-    const narrativeImage = screen.getByAltText('The Forest Crossroads')
-    expect(narrativeImage).toBeInTheDocument()
-    expect(narrativeImage).toHaveAttribute('src', 'forest-crossroads.jpg')
+    const choiceImage = screen.getByAltText('The Forest Crossroads')
+    expect(choiceImage).toBeInTheDocument()
+    expect(choiceImage).toHaveAttribute('src', 'forest-crossroads.jpg')
   })
 
-  it('hides narrative image when not available', () => {
-    const narrativeWithoutImage = {
-      ...mockNarrative,
+  it('hides choice image when not available', () => {
+    const choiceWithoutImage = {
+      ...mockChoice,
       image: undefined,
     }
 
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={choiceWithoutImage}
         game={mockCyoaGame}
         loading={false}
-        narrative={narrativeWithoutImage}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )
@@ -314,12 +269,7 @@ describe('NarrativeDisplay component', () => {
 
   it('displays resource image when available', () => {
     render(
-      <NarrativeDisplay
-        game={mockCyoaGame}
-        loading={false}
-        narrative={mockNarrative}
-        onChoiceSelect={mockOnChoiceSelect}
-      />,
+      <ChoiceDisplay choice={mockChoice} game={mockCyoaGame} loading={false} onChoiceSelect={mockOnChoiceSelect} />,
     )
 
     const resourceImage = screen.getByAltText('Health')
@@ -334,10 +284,10 @@ describe('NarrativeDisplay component', () => {
     }
 
     render(
-      <NarrativeDisplay
+      <ChoiceDisplay
+        choice={mockChoice}
         game={gameWithoutResourceImage}
         loading={false}
-        narrative={mockNarrative}
         onChoiceSelect={mockOnChoiceSelect}
       />,
     )

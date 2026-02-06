@@ -3,44 +3,44 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import { mockCyoaGame, mockNarrative } from '../../../test/__mocks__'
+import { mockCyoaGame, mockChoice } from '../../../test/__mocks__'
 import StoryEngine from './index'
-import NarrativeDisplay from '@components/narrative-display'
-import { fetchCyoaGame, fetchNarrative } from '@services/cyoa'
+import ChoiceDisplay from '@components/choice-display'
+import { fetchCyoaGame, fetchChoice } from '@services/cyoa'
 
-jest.mock('@components/narrative-display')
+jest.mock('@components/choice-display')
 jest.mock('@services/cyoa')
 
 describe('StoryEngine component', () => {
-  const mockNextNarrative = {
-    ...mockNarrative,
+  const mockNextChoice = {
+    ...mockChoice,
     choice: 'What do you do with the chest?',
     narrative: 'You went left and found a treasure chest.',
     options: [{ name: 'Open it' }, { name: 'Leave it' }],
   }
 
   beforeAll(() => {
-    jest.mocked(NarrativeDisplay).mockReturnValue(<>NarrativeDisplay</>)
+    jest.mocked(ChoiceDisplay).mockReturnValue(<>ChoiceDisplay</>)
     console.error = jest.fn()
   })
 
-  it('loads initial game and narrative', async () => {
+  it('loads initial game and choice', async () => {
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
-    jest.mocked(fetchNarrative).mockResolvedValueOnce({ data: mockNarrative, isGenerating: false })
+    jest.mocked(fetchChoice).mockResolvedValueOnce({ data: mockChoice, isGenerating: false })
 
     render(<StoryEngine gameId="test-game" />)
 
     await waitFor(() => {
       expect(fetchCyoaGame).toHaveBeenCalledWith('test-game')
-      expect(fetchNarrative).toHaveBeenCalledWith('test-game', 'start')
+      expect(fetchChoice).toHaveBeenCalledWith('test-game', 'start')
     })
 
-    expect(NarrativeDisplay).toHaveBeenCalledWith(
+    expect(ChoiceDisplay).toHaveBeenCalledWith(
       {
+        choice: mockChoice,
         errorMessage: null,
         game: mockCyoaGame,
         loading: false,
-        narrative: mockNarrative,
         onChoiceSelect: expect.any(Function),
       },
       {},
@@ -49,16 +49,16 @@ describe('StoryEngine component', () => {
 
   it('shows loading state initially', () => {
     jest.mocked(fetchCyoaGame).mockImplementation(() => new Promise(() => {}))
-    jest.mocked(fetchNarrative).mockImplementation(() => new Promise(() => {}))
+    jest.mocked(fetchChoice).mockImplementation(() => new Promise(() => {}))
 
     render(<StoryEngine gameId="test-game" />)
 
-    expect(NarrativeDisplay).toHaveBeenCalledWith(
+    expect(ChoiceDisplay).toHaveBeenCalledWith(
       {
+        choice: null,
         errorMessage: null,
         game: null,
         loading: true,
-        narrative: null,
         onChoiceSelect: expect.any(Function),
       },
       {},
@@ -80,79 +80,79 @@ describe('StoryEngine component', () => {
     expect(screen.getByText('Retry')).toBeInTheDocument()
   })
 
-  it('handles narrative loading error', async () => {
-    const error = new Error('Failed to load narrative')
+  it('handles choice loading error', async () => {
+    const error = new Error('Failed to load choice')
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
-    jest.mocked(fetchNarrative).mockRejectedValueOnce(error)
+    jest.mocked(fetchChoice).mockRejectedValueOnce(error)
 
     render(<StoryEngine gameId="test-game" />)
 
     await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith('pollForNarrative', { error })
+      expect(console.error).toHaveBeenCalledWith('pollForChoice', { error })
     })
 
-    expect(NarrativeDisplay).toHaveBeenCalledWith(
+    expect(ChoiceDisplay).toHaveBeenCalledWith(
       expect.objectContaining({
+        choice: null,
         errorMessage: 'Failed to load next story segment. Please try again.',
         game: mockCyoaGame,
         loading: false,
-        narrative: null,
       }),
       {},
     )
   })
 
-  it('loads next narrative when choice selected', async () => {
+  it('loads next choice when choice selected', async () => {
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest
-      .mocked(fetchNarrative)
-      .mockResolvedValueOnce({ data: mockNarrative, isGenerating: false })
-      .mockResolvedValueOnce({ data: mockNextNarrative, isGenerating: false })
+      .mocked(fetchChoice)
+      .mockResolvedValueOnce({ data: mockChoice, isGenerating: false })
+      .mockResolvedValueOnce({ data: mockNextChoice, isGenerating: false })
 
     render(<StoryEngine gameId="test-game" />)
 
     await waitFor(() => {
-      expect(NarrativeDisplay).toHaveBeenCalledWith(
+      expect(ChoiceDisplay).toHaveBeenCalledWith(
         expect.objectContaining({
+          choice: mockChoice,
           game: mockCyoaGame,
           loading: false,
-          narrative: mockNarrative,
         }),
         {},
       )
     })
 
-    const lastCall = jest.mocked(NarrativeDisplay).mock.calls[jest.mocked(NarrativeDisplay).mock.calls.length - 1]
+    const lastCall = jest.mocked(ChoiceDisplay).mock.calls[jest.mocked(ChoiceDisplay).mock.calls.length - 1]
     const onChoiceSelect = lastCall[0].onChoiceSelect
 
     onChoiceSelect(0)
 
     await waitFor(() => {
-      expect(fetchNarrative).toHaveBeenCalledWith('test-game', 'start-0')
+      expect(fetchChoice).toHaveBeenCalledWith('test-game', 'start-0')
     })
 
-    expect(NarrativeDisplay).toHaveBeenCalledWith(
+    expect(ChoiceDisplay).toHaveBeenCalledWith(
       expect.objectContaining({
+        choice: mockNextChoice,
         game: mockCyoaGame,
         loading: false,
-        narrative: mockNextNarrative,
       }),
       {},
     )
   })
 
   it('handles choice selection error', async () => {
-    const error = new Error('Failed to load next narrative')
+    const error = new Error('Failed to load next choice')
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
     jest
-      .mocked(fetchNarrative)
-      .mockResolvedValueOnce({ data: mockNarrative, isGenerating: false })
+      .mocked(fetchChoice)
+      .mockResolvedValueOnce({ data: mockChoice, isGenerating: false })
       .mockRejectedValueOnce(error)
 
     render(<StoryEngine gameId="test-game" />)
 
     await waitFor(() => {
-      expect(NarrativeDisplay).toHaveBeenCalledWith(
+      expect(ChoiceDisplay).toHaveBeenCalledWith(
         expect.objectContaining({
           loading: false,
         }),
@@ -160,21 +160,21 @@ describe('StoryEngine component', () => {
       )
     })
 
-    const lastCall = jest.mocked(NarrativeDisplay).mock.calls[jest.mocked(NarrativeDisplay).mock.calls.length - 1]
+    const lastCall = jest.mocked(ChoiceDisplay).mock.calls[jest.mocked(ChoiceDisplay).mock.calls.length - 1]
     const onChoiceSelect = lastCall[0].onChoiceSelect
 
     onChoiceSelect(1)
 
     await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith('pollForNarrative', { error })
+      expect(console.error).toHaveBeenCalledWith('pollForChoice', { error })
     })
 
-    expect(NarrativeDisplay).toHaveBeenCalledWith(
+    expect(ChoiceDisplay).toHaveBeenCalledWith(
       expect.objectContaining({
+        choice: mockChoice,
         errorMessage: 'Failed to load next story segment. Please try again.',
         game: mockCyoaGame,
         loading: false,
-        narrative: mockNarrative,
       }),
       {},
     )
@@ -183,7 +183,7 @@ describe('StoryEngine component', () => {
   it('reloads initial game when retry clicked and no current game', async () => {
     const error = new Error('Failed to load game')
     jest.mocked(fetchCyoaGame).mockRejectedValueOnce(error).mockResolvedValueOnce(mockCyoaGame)
-    jest.mocked(fetchNarrative).mockResolvedValueOnce({ data: mockNarrative, isGenerating: false })
+    jest.mocked(fetchChoice).mockResolvedValueOnce({ data: mockChoice, isGenerating: false })
 
     render(<StoryEngine gameId="test-game" />)
 
@@ -200,21 +200,21 @@ describe('StoryEngine component', () => {
     })
   })
 
-  it('does nothing when choice selected but no current narrative', async () => {
+  it('does nothing when choice selected but no current choice', async () => {
     jest.mocked(fetchCyoaGame).mockResolvedValueOnce(mockCyoaGame)
-    jest.mocked(fetchNarrative).mockResolvedValueOnce({ data: mockNarrative, isGenerating: false })
+    jest.mocked(fetchChoice).mockResolvedValueOnce({ data: mockChoice, isGenerating: false })
 
     render(<StoryEngine gameId="test-game" />)
 
     await waitFor(() => {
-      expect(fetchNarrative).toHaveBeenCalledTimes(1)
+      expect(fetchChoice).toHaveBeenCalledTimes(1)
     })
 
-    const lastCall = jest.mocked(NarrativeDisplay).mock.calls[0]
+    const lastCall = jest.mocked(ChoiceDisplay).mock.calls[0]
     const onChoiceSelect = lastCall[0].onChoiceSelect
 
     onChoiceSelect(0)
 
-    expect(fetchNarrative).toHaveBeenCalledTimes(1)
+    expect(fetchChoice).toHaveBeenCalledTimes(1)
   })
 })

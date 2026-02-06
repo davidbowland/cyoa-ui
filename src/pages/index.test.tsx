@@ -23,7 +23,7 @@ describe('Index page', () => {
         {
           description: 'A test game',
           gameId: 'test-game',
-          initialNarrativeId: 'start',
+          initialChoiceId: 'start',
           lossResourceThreshold: 0,
           resourceName: 'Health',
           startingResourceValue: 100,
