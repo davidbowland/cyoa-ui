@@ -1,11 +1,11 @@
 /* eslint-disable sort-keys */
-import { Theme, CyoaGame, CyoaGameBulk, Narrative } from '@types'
+import { Theme, CyoaGame, CyoaGameBulk, CyoaChoice } from '@types'
 
 // CYOA Mock Data
 
 export const mockCyoaGame: CyoaGame = {
   description: 'A test adventure',
-  initialNarrativeId: 'start',
+  initialChoiceId: 'start',
   lossResourceThreshold: 0,
   resourceName: 'Health',
   resourceImage: 'health-icon.png',
@@ -23,7 +23,7 @@ export const mockCyoaGames: CyoaGameBulk[] = [
     description: 'A thrilling adventure awaits',
     gameId: 'game-1',
     image: 'https://example.com/image1.jpg',
-    initialNarrativeId: 'start',
+    initialChoiceId: 'start',
     lossResourceThreshold: 0,
     resourceName: 'Health',
     resourceImage: 'health-icon.png',
@@ -33,7 +33,7 @@ export const mockCyoaGames: CyoaGameBulk[] = [
   {
     description: 'Another exciting journey',
     gameId: 'game-2',
-    initialNarrativeId: 'begin',
+    initialChoiceId: 'begin',
     lossResourceThreshold: 0,
     resourceName: 'Energy',
     startingResourceValue: 50,
@@ -41,7 +41,7 @@ export const mockCyoaGames: CyoaGameBulk[] = [
   },
 ]
 
-export const mockNarrative: Narrative = {
+export const mockChoice: CyoaChoice = {
   chapterTitle: 'The Forest Crossroads',
   choice: 'What do you do?',
   currentResourceValue: 100,

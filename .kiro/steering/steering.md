@@ -45,7 +45,7 @@ This is a Gatsby project for a Choose Your Own Adventure interactive storytellin
 ### src/types.ts
 
 - TypeScript interfaces for CYOA domain objects
-- Use explicit type aliases rather than strings (GameId, NarrativeId)
+- Use explicit type aliases rather than strings (GameId, ChoiceId)
 
 ### src/environment.d.ts
 
@@ -76,7 +76,7 @@ This is a Gatsby project for a Choose Your Own Adventure interactive storytellin
 
 ```typescript
 // All exported functions must have explicit types for parameters and return values:
-export const formatNarrativeId = (baseId: NarrativeId, optionIndex: number): NarrativeId => {
+export const formatChoiceId = (baseId: ChoiceId, optionIndex: number): ChoiceId => {
   return `${baseId}-${optionIndex}`
 }
 
@@ -190,7 +190,7 @@ describe('fetchCyoaGame', () => {
   it('fetches a specific CYOA game', async () => {
     const mockGame = {
       description: 'A test game',
-      initialNarrativeId: 'start',
+      initialChoiceId: 'start',
       resourceName: 'Health',
       title: 'Test Game',
     }
@@ -208,22 +208,22 @@ describe('fetchCyoaGame', () => {
 
 ```typescript
 // Mock child components in parent component tests:
-jest.mock('@components/narrative-display')
+jest.mock('@components/choice-display')
 
 beforeAll(() => {
-  jest.mocked(NarrativeDisplay).mockReturnValue(<></>)
+  jest.mocked(ChoiceDisplay).mockReturnValue(<></>)
 })
 
 // Test component interactions through props:
-test('expect choice selection loads next narrative', async () => {
+test('expect choice selection loads next choice', async () => {
   // Setup mocks and render component
 
-  const lastCall = jest.mocked(NarrativeDisplay).mock.calls[jest.mocked(NarrativeDisplay).mock.calls.length - 1]
+  const lastCall = jest.mocked(ChoiceDisplay).mock.calls[jest.mocked(ChoiceDisplay).mock.calls.length - 1]
   const onChoiceSelect = lastCall[0].onChoiceSelect
 
   await onChoiceSelect(0)
 
-  expect(fetchNarrative).toHaveBeenCalledWith('test-game', 'start-0')
+  expect(fetchChoice).toHaveBeenCalledWith('test-game', 'start-0')
 })
 ```
 
@@ -257,7 +257,7 @@ const conditionalValue = Math.random() > 0.5 ? 'a' : 'b'
 // GOOD - Deterministic:
 const fixedTimestamp = 1640995200000 // Use fixed values
 const testGameId = 'test-game-123'
-const expectedNarrativeId = 'start-0' // Use consistent test data
+const expectedChoiceId = 'start-0' // Use consistent test data
 ```
 
 ### Component Mocking Patterns

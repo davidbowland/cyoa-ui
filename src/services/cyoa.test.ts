@@ -1,5 +1,5 @@
-import { mockCyoaGame, mockCyoaGames, mockNarrative } from '../../test/__mocks__'
-import { fetchCyoaGames, fetchCyoaGame, fetchNarrative } from './cyoa'
+import { mockCyoaGame, mockCyoaGames, mockChoice } from '../../test/__mocks__'
+import { fetchCyoaGames, fetchCyoaGame, fetchChoice } from './cyoa'
 
 const mockGet = jest.fn()
 jest.mock('axios', () => ({
@@ -45,30 +45,30 @@ describe('cyoa', () => {
     })
   })
 
-  describe('fetchNarrative', () => {
-    it('fetches a narrative for a game with 200 status', async () => {
-      mockGet.mockResolvedValueOnce({ data: mockNarrative, status: 200 })
+  describe('fetchChoice', () => {
+    it('fetches a choice for a game with 200 status', async () => {
+      mockGet.mockResolvedValueOnce({ data: mockChoice, status: 200 })
 
-      const result = await fetchNarrative('game-1', 'start')
+      const result = await fetchChoice('game-1', 'start')
 
-      expect(mockGet).toHaveBeenCalledWith('/games/game-1/narratives/start')
-      expect(result).toEqual({ data: mockNarrative, isGenerating: false })
+      expect(mockGet).toHaveBeenCalledWith('/games/game-1/choices/start')
+      expect(result).toEqual({ data: mockChoice, isGenerating: false })
     })
 
     it('returns isGenerating true for 202 status', async () => {
-      mockGet.mockResolvedValueOnce({ data: mockNarrative, status: 202 })
+      mockGet.mockResolvedValueOnce({ data: mockChoice, status: 202 })
 
-      const result = await fetchNarrative('game-1', 'start')
+      const result = await fetchChoice('game-1', 'start')
 
-      expect(mockGet).toHaveBeenCalledWith('/games/game-1/narratives/start')
-      expect(result).toEqual({ data: mockNarrative, isGenerating: true })
+      expect(mockGet).toHaveBeenCalledWith('/games/game-1/choices/start')
+      expect(result).toEqual({ data: mockChoice, isGenerating: true })
     })
 
     it('throws error on failure', async () => {
-      const mockError = new Error('Narrative not found')
+      const mockError = new Error('Choice not found')
       mockGet.mockRejectedValueOnce(mockError)
 
-      await expect(fetchNarrative('game-1', 'invalid-narrative')).rejects.toThrow('Narrative not found')
+      await expect(fetchChoice('game-1', 'invalid-choice')).rejects.toThrow('Choice not found')
     })
   })
 })
